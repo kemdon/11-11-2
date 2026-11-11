@@ -1,0 +1,107 @@
+---
+interface StatItem {
+  value?: string;
+  label?: string;
+  detail?: string;
+}
+
+interface Props {
+  label?: string;
+  title?: string;
+  stats: StatItem[];
+}
+
+const { label, title, stats } = Astro.props;
+const visibleStats = stats.filter((item) => item.value || item.label || item.detail);
+---
+
+{visibleStats.length > 0 && (
+  <section class="stats-section section-padding">
+    <div class="container">
+      <div class="stats-head fade-in-up">
+        {label && <span class="section-kicker">{label}</span>}
+        {title && <h2 class="stats-title">{title}</h2>}
+      </div>
+
+      <div class="stats-grid">
+        {visibleStats.map((item, index) => (
+          <article class="stat-card fade-in-up" style={`transition-delay: ${index * 90}ms`}>
+            {item.value && <div class="stat-value">{item.value}</div>}
+            {item.label && <h3 class="stat-label">{item.label}</h3>}
+            {item.detail && <p class="stat-detail">{item.detail}</p>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .stats-section {
+    background:
+      radial-gradient(circle at top left, rgba(197, 160, 89, 0.14), transparent 36%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(250, 250, 249, 0.98));
+  }
+
+  .stats-head {
+    display: grid;
+    gap: 1rem;
+    max-width: 42rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-kicker {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .stats-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    min-height: 18rem;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(28, 25, 23, 0.08);
+    box-shadow: 0 24px 60px rgba(28, 25, 23, 0.06);
+  }
+
+  .stat-value {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 7vw, 4.5rem);
+    line-height: 1;
+    color: var(--color-primary-dark);
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .stat-detail {
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+      min-height: auto;
+    }
+  }
+</style>

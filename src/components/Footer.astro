@@ -1,0 +1,85 @@
+---
+import type { SiteSettings } from '../lib/site-content';
+
+interface Props {
+  site: SiteSettings;
+  locale: string;
+}
+
+const { site } = Astro.props;
+const links = (site.footerLinks || []).filter((item) => item.label && item.href);
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="footer-mark" aria-hidden="true">S</span>
+          <span><strong>笑纳包装</strong><small>SHINERPACK</small></span>
+        </div>
+        <p class="footer-motto">{site.footerMotto || '完美包装从这里开始'}</p>
+        <p class="footer-desc">{site.footerBody}</p>
+      </div>
+
+      <div class="footer-col">
+        <h2>{site.footerQuickLinksLabel || '快速导航'}</h2>
+        <ul>
+          {links.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h2>{site.footerContactColumnTitle || '联系我们'}</h2>
+        <ul class="contact-list">
+          <li><span>电话</span><a href={site.contactPhonePrimaryHref || `tel:${site.footerPhone}`}>{site.footerPhone}</a></li>
+          <li><span>邮箱</span><a href={`mailto:${site.footerEmail}`}>{site.footerEmail}</a></li>
+          <li><span>网址</span><a href="https://www.packb2b.com" target="_blank" rel="noopener noreferrer">packb2b.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-address">
+        <h2>办公与生产基地</h2>
+        <p>办公地址：{site.footerAddress}</p>
+        <p>生产基地：广东省东莞市大岭山镇马蹄岗华表街1号龙圣工业园 F、E、A 栋</p>
+        <p class="footer-en">Guangdong Shiner Packaging Co., Ltd.</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>{site.copyrightLine}</p>
+      <p>环保纸缓冲包装 · 包装机械 · 现场包装方案</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--ink); color: rgba(246, 242, 233, 0.72); padding: 84px 0 28px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+  .footer-top { display: grid; grid-template-columns: 1.5fr 0.7fr 1fr 1.25fr; gap: 56px; padding-bottom: 64px; }
+  .footer-logo { display: flex; align-items: center; gap: 12px; color: var(--white); }
+  .footer-mark { display: grid; place-items: center; width: 36px; height: 36px; background: var(--paper); color: var(--ink); font-family: var(--font-display); font-size: 22px; font-weight: 700; border-radius: 2px; }
+  .footer-logo strong { display: block; font-size: 17px; letter-spacing: 0.08em; line-height: 1.2; }
+  .footer-logo small { display: block; font-family: var(--font-display); font-size: 9px; letter-spacing: 0.24em; color: var(--kraft-light); margin-top: 3px; }
+  .footer-motto { margin-top: 28px; font-size: 22px; color: var(--white); letter-spacing: 0.04em; }
+  .footer-desc { margin-top: 14px; max-width: 34ch; font-size: 13px; line-height: 1.9; color: rgba(246, 242, 233, 0.52); }
+
+  .footer-col h2 { margin-bottom: 22px; font-size: 12px; font-weight: 600; letter-spacing: 0.18em; color: var(--kraft-light); text-transform: uppercase; }
+  .footer-col ul { display: grid; gap: 12px; }
+  .footer-col a { font-size: 14px; color: rgba(246, 242, 233, 0.74); }
+  .footer-col a:hover { color: var(--white); }
+  .contact-list li { display: grid; grid-template-columns: 42px 1fr; gap: 8px; align-items: baseline; font-size: 14px; }
+  .contact-list span { font-size: 11px; letter-spacing: 0.12em; color: rgba(246, 242, 233, 0.4); }
+  .footer-address p { font-size: 13px; line-height: 1.9; margin-bottom: 10px; }
+  .footer-en { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.04em; color: rgba(246, 242, 233, 0.42); }
+
+  .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 12px; color: rgba(246, 242, 233, 0.4); }
+
+  @media (max-width: 1000px) {
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 44px; }
+  }
+  @media (max-width: 640px) {
+    .site-footer { padding-top: 64px; }
+    .footer-top { grid-template-columns: 1fr; gap: 38px; padding-bottom: 46px; }
+    .footer-bottom { flex-direction: column; gap: 8px; }
+  }
+</style>

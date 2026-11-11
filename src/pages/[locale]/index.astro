@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Hero from '../../components/Hero.astro';
+import FeatureSection from '../../components/FeatureSection.astro';
+import LogoCloud from '../../components/LogoCloud.astro';
+import StatsSection from '../../components/StatsSection.astro';
+import ShowcaseSection from '../../components/ShowcaseSection.astro';
+import CTABanner from '../../components/CTABanner.astro';
+import Footer from '../../components/Footer.astro';
+import ScrollObserver from '../../components/ScrollObserver.astro';
+import { getHomePage, getSiteSettings, getLocaleConfig } from '../../lib/site-content';
+
+export async function getStaticPaths() {
+  const { defaultLocale, locales } = await getLocaleConfig();
+  return locales
+    .filter((locale) => locale.code.toLowerCase() !== defaultLocale.toLowerCase())
+    .map((locale) => ({ params: { locale: locale.code } }));
+}
+
+const { locale } = Astro.params;
+if (!locale) {
+  throw new Error('Locale not found');
+}
+
+const site = await getSiteSettings(locale);
+const home = await getHomePage(locale, site.defaultLocale);
+const { defaultLocale, locales } = await getLocaleConfig();
+const alternateLocales = Astro.site ? [
+  ...locales.map((item) => ({
+    lang: item.code,
+    href: new URL(item.code.toLowerCase() === defaultLocale.toLowerCase() ? '/' : `/${item.code}/`, Astro.site).toString(),
+  })),
+  { lang: 'x-default', href: new URL('/', Astro.site).toString() },
+] : [];
+---
+
+<Layout
+  title={home.heroTitle}
+  description={site.defaultMetaDescription}
+  lang={locale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  ogImage={site.defaultOgImage}
+  alternateLocales={alternateLocales}
+>
+  <Navbar site={site} locale={locale} currentPath="/" />
+  <main>
+    <Hero
+      label={home.heroLabel}
+      title={home.heroTitle}
+      body={home.heroBody}
+      image={home.heroImage}
+      primaryLabel={home.heroPrimaryLabel}
+      primaryHref={home.heroPrimaryHref}
+      secondaryLabel={home.heroSecondaryLabel}
+      secondaryHref={home.heroSecondaryHref}
+      scrollText={site.heroScrollText}
+    />
+    <FeatureSection
+      title={home.introTitle || ''}
+      body={home.introBody || ''}
+      highlights={home.highlights}
+    />
+    <LogoCloud
+      label={home.logoCloudLabel}
+      title={home.logoCloudTitle}
+      logos={home.logos}
+    />
+    <StatsSection
+      label={home.statsLabel}
+      title={home.statsTitle}
+      stats={home.stats}
+    />
+    <ShowcaseSection
+      label={home.showcaseLabel}
+      title={home.showcaseTitle}
+      body={home.showcaseBody}
+      showcases={home.showcases}
+    />
+    <CTABanner
+      locale={locale}
+      label={home.ctaLabel}
+      title={home.ctaTitle}
+      body={home.ctaBody}
+      primaryLabel={home.ctaPrimaryLabel}
+      primaryHref={home.ctaPrimaryHref}
+      secondaryLabel={home.ctaSecondaryLabel}
+      secondaryHref={home.ctaSecondaryHref}
+    />
+  </main>
+  <Footer site={site} locale={locale} />
+  <ScrollObserver />
+</Layout>

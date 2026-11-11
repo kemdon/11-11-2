@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三个独立站内容分析报告 · 2026-11-11</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#30363d;
+  --tx:#e6edf3; --tx2:#a9b4c0; --tx3:#7d8996;
+  --blue:#58a6ff; --cyan:#39c5cf; --green:#3fb950; --amber:#d29922;
+  --red:#f85149; --purple:#bc8cff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px 100px}
+a{color:var(--blue);text-decoration:none}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.86em;
+  background:#222a35;color:#a5d6ff;padding:2px 6px;border-radius:5px;word-break:break-all}
+h2{font-size:25px;margin:0 0 6px;letter-spacing:.4px}
+p{margin:12px 0}
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line);margin-bottom:38px}
+.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:3px;font-weight:700;margin-bottom:14px}
+.hero h1{font-size:40px;line-height:1.3;margin:0 0 16px;letter-spacing:.5px}
+.hero .sub{color:var(--tx2);font-size:15px;max-width:800px}
+.chips{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;
+  padding:6px 14px;font-size:12.5px;color:var(--tx2)}
+.chip b{color:var(--blue);font-weight:600}
+.meta{margin-top:20px;color:var(--tx3);font-size:12.5px}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.nav a{border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:12.5px;color:var(--tx2)}
+.nav a:hover{border-color:var(--blue);color:var(--blue)}
+section{margin:0 0 62px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:26px}
+.sec-num{color:var(--blue);font-size:13px;font-weight:700;letter-spacing:2px}
+.lead{color:var(--tx2);font-size:15px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:18px 0}
+.card.blue{border-left:4px solid var(--blue)}
+.card.green{border-left:4px solid var(--green)}
+.card.amber{border-left:4px solid var(--amber)}
+.big-quote{font-size:20px;line-height:1.7;font-weight:600;color:#fff;margin:0 0 12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 16px}
+.kpi .n{font-size:29px;font-weight:750;color:var(--blue);line-height:1.2}
+.kpi .n.warn{color:var(--amber)} .kpi .n.ok{color:var(--green)} .kpi .n.pp{color:var(--purple)}
+.kpi .t{font-size:12.5px;color:var(--tx2);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mini{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.mini .h{font-weight:700;color:#fff;margin-bottom:8px;font-size:15px}
+.mini .b{font-size:13.5px;color:var(--tx2)}
+.mini .site{font-size:11.5px;color:var(--cyan);letter-spacing:1px;margin-bottom:10px;font-weight:700}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;margin-right:6px}
+.tag.tech{background:#12283f;color:var(--blue);border:1px solid #1f4a75}
+.tag.plain{background:#1d2b1f;color:var(--green);border:1px solid #2c5231}
+.tag.hi{background:#3a1a1c;color:#ff8a80;border:1px solid #6b2626}
+.tag.md{background:#332a13;color:#e8c05c;border:1px solid #5c4a1e}
+.tag.lo{background:#1d2433;color:#a5b4d4;border:1px solid #33405c}
+.plainline{background:#141c19;border-left:3px solid var(--green);padding:10px 14px;border-radius:0 8px 8px 0;
+  color:#b8d8c0;font-size:13.5px;margin:10px 0}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:18px 0}
+table{border-collapse:collapse;width:100%;min-width:700px;font-size:13.2px}
+th{background:var(--panel2);color:var(--tx);text-align:left;padding:12px 14px;font-weight:650;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid #242b34;color:var(--tx2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#1a2029}
+td strong{color:var(--tx)}
+.good{color:var(--green);font-weight:600} .bad{color:#ff8a80;font-weight:600} .warnc{color:#e8c05c;font-weight:600}
+.diagram{background:linear-gradient(160deg,#111a26,#0f141c);border:1px solid var(--line);border-radius:14px;padding:18px;margin:20px 0}
+.diagram svg{width:100%;height:auto;display:block}
+.dnote{font-size:12.5px;color:var(--tx3);margin-top:6px}
+.bars{margin:18px 0}
+.barrow{display:grid;grid-template-columns:168px 1fr 96px;gap:12px;align-items:center;margin:11px 0;font-size:13px}
+.bartrack{background:#222a35;border-radius:6px;height:14px;overflow:hidden}
+.barfill{height:100%;border-radius:6px;background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+.barfill.b2{background:linear-gradient(90deg,#b0740f,#d29922)}
+.barfill.b3{background:linear-gradient(90deg,#8957e5,#bc8cff)}
+.barval{color:var(--tx2);text-align:right;font-size:12.5px}
+.risk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.risk .rt{font-weight:700;color:#fff;font-size:15.5px;margin-bottom:8px}
+.risk .rb{font-size:13.5px;color:var(--tx2)}
+.risk .ev{margin:10px 0;font-size:13px;color:#c9d6e3;background:#0b1017;border:1px solid #26303c;border-radius:8px;padding:10px 12px}
+.risk .fix{margin-top:10px;font-size:13px;color:#a5d6ff;background:#12202f;border-radius:8px;padding:9px 12px}
+.risk.h{border-left:4px solid var(--red)} .risk.m{border-left:4px solid var(--amber)} .risk.l{border-left:4px solid var(--blue)}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:18px 0}
+ol.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:13px 16px 13px 54px;margin:10px 0;position:relative;font-size:14px;color:var(--tx2)}
+ol.steps li::before{content:counter(s);position:absolute;left:16px;top:13px;width:24px;height:24px;
+  background:#1f6feb;color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+ol.steps li b{color:var(--tx)}
+ul.clean{padding-left:20px;color:var(--tx2);font-size:13.5px}
+ul.clean li{margin:6px 0}
+.chk{list-style:none;padding:0;margin:0}
+.chk li{padding:7px 0 7px 26px;position:relative;border-bottom:1px solid #242b34;font-size:13.5px;color:var(--tx2)}
+.chk li:last-child{border-bottom:none}
+.chk li::before{content:"□";position:absolute;left:2px;color:var(--blue);font-size:15px}
+.chk li b{color:var(--tx)}
+.phase{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.phase .ph{color:var(--cyan);font-size:12px;letter-spacing:2px;font-weight:700;margin-bottom:6px}
+.phase .pt{font-weight:700;color:#fff;font-size:16px;margin-bottom:10px}
+.foot{border-top:1px solid var(--line);padding-top:22px;color:var(--tx3);font-size:12.5px}
+@media(max-width:800px){
+  .kpis,.grid2,.grid3{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:30px}.barrow{grid-template-columns:110px 1fr 84px}
+  .wrap{padding:0 16px 70px}
+}
+@media print{body{background:#fff;color:#111}.card,.mini,.kpi,.risk,.phase{background:#fff;border-color:#ccc;color:#111}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="eyebrow">CONTENT AUDIT · 工业品独立站内容诊断</div>
+  <h1>内容不是没写，<br>是写错了地方、放错了站</h1>
+  <div class="sub">对英文主站、纯纸站、中文站做的一次内容体检：沿工业品 B2B 采购决策链「找到 → 看懂 → 信任 → 询价」逐段核对导航与分类、产品页信息、信任背书、资料下载、博客内容、多语言与重复内容。全部结论来自 26 个公开页面的正文、标题、链接与结构化数据，不依赖后台权限。</div>
+  <div class="chips">
+    <span class="chip"><b>英文主站</b> www.packb2b.com</span>
+    <span class="chip"><b>纯纸站</b> www.papercushion.com</span>
+    <span class="chip"><b>中文站</b> www.shinerpack.com</span>
+    <span class="chip"><b>配套阅读</b> 独立站技术分析报告</span>
+  </div>
+  <div class="meta">采样时间：2026-11-11 14:56–15:10（北京时间） · 方式：公开 GET 抓取页面 HTML + HEAD 检查下载文件 · 未登录后台、未做提交测试</div>
+</div>
+
+<div class="nav">
+  <a href="#s1">① 一句话结论</a><a href="#s2">② 采样口径</a><a href="#s3">③ 内容家底盘点</a>
+  <a href="#s4">④ 六个结构性问题</a><a href="#s5">⑤ 内容成熟度对照</a><a href="#s6">⑥ 改造路线图</a>
+  <a href="#s7">⑦ 可直接抄的模板</a><a href="#s8">⑧ 方法与边界</a>
+</div>
+
+<!-- ① -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">01</span><h2>一句话结论</h2></div>
+  <div class="card blue">
+    <p class="big-quote">从内容角度看，这三站不缺素材，缺的是「一套能成交的内容标准」。</p>
+    <p class="lead">参数、应用场景、专利认证、可持续论证、经销商政策、指南型博客其实都写了，有些还写得不错。但它们被塞进 B2C 电商模板、长段落与图片里，三个站互相复制又没有主从关系，本地化只做了一半。结果是：<strong style="color:#fff">人能凑合看懂，搜索引擎和 AI 读不懂，采购没法比价，销售拿不到合格线索。</strong></p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="n warn">3.0–3.5%</div><div class="t">首页图片 alt 覆盖率：114 张里 4 张、100 张里 3 张</div></div>
+    <div class="kpi"><div class="n pp">1 份</div><div class="t">每站唯一可下载资料 Catalogue.pdf（40–45 MB / 约 47 页）</div></div>
+    <div class="kpi"><div class="n">0 条</div><div class="t">三站之间的 hreflang 标注，内容重复却无语言互认</div></div>
+    <div class="kpi"><div class="n warn">404</div><div class="t">纯纸站 / 中文站首页主 CTA「访问商店」的目标页</div></div>
+  </div>
+
+  <div class="grid3">
+    <div class="mini"><div class="site">FINDING 01</div><div class="h">有素材，无结构</div><div class="b">真正的技术参数写在长段落、长图和博客文章里；WooCommerce 规格表里躺着化妆品字段。机器能读到的"规格"是 <code>Volume 20 ml</code>。</div></div>
+    <div class="mini"><div class="site">FINDING 02</div><div class="h">有复制，无治理</div><div class="b">About / 可持续发展 / 下载三页的标题逐条对应，博客文章 ID 都相同；中文站仍挂英文目录 PDF、英文导航、美元价和英寸单位。</div></div>
+    <div class="mini"><div class="site">FINDING 03</div><div class="h">有入口，无转化</div><div class="b">首页「Add to cart」出现 8 / 14 / 16 次，「Get a Sample」只有英文站 1 次；询盘表单 5 个可见字段，没有公司名、国家、数量。</div></div>
+  </div>
+
+  <div class="diagram">
+    <svg viewBox="0 0 1020 218" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="工业品采购内容决策链及三处断点">
+      <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#58a6ff"/></marker></defs>
+      <g font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+        <rect x="6" y="24" width="222" height="86" rx="12" fill="#161b22" stroke="#30363d"/>
+        <text x="117" y="54" fill="#e6edf3" font-size="17" font-weight="700" text-anchor="middle">找到</text>
+        <text x="117" y="78" fill="#a9b4c0" font-size="12" text-anchor="middle">分类导航 / TDK / 搜索</text>
+        <text x="117" y="97" fill="#3fb950" font-size="11.5" text-anchor="middle">35 / 10 / 10 个分类链接</text>
+
+        <rect x="268" y="24" width="222" height="86" rx="12" fill="#161b22" stroke="#30363d"/>
+        <text x="379" y="54" fill="#e6edf3" font-size="17" font-weight="700" text-anchor="middle">看懂</text>
+        <text x="379" y="78" fill="#a9b4c0" font-size="12" text-anchor="middle">参数 / 应用 / 选型</text>
+        <text x="379" y="97" fill="#f85149" font-size="11.5" text-anchor="middle">规格表串类目、alt 仅 3%</text>
+
+        <rect x="530" y="24" width="222" height="86" rx="12" fill="#161b22" stroke="#30363d"/>
+        <text x="641" y="54" fill="#e6edf3" font-size="17" font-weight="700" text-anchor="middle">信任</text>
+        <text x="641" y="78" fill="#a9b4c0" font-size="12" text-anchor="middle">认证 / 案例 / 工厂</text>
+        <text x="641" y="97" fill="#d29922" font-size="11.5" text-anchor="middle">认证只写在一段文字里</text>
+
+        <rect x="792" y="24" width="222" height="86" rx="12" fill="#161b22" stroke="#30363d"/>
+        <text x="903" y="54" fill="#e6edf3" font-size="17" font-weight="700" text-anchor="middle">询价</text>
+        <text x="903" y="78" fill="#a9b4c0" font-size="12" text-anchor="middle">RFQ / 样品 / 交期</text>
+        <text x="903" y="97" fill="#f85149" font-size="11.5" text-anchor="middle">主 CTA 404、表单 5 字段</text>
+
+        <line x1="230" y1="67" x2="262" y2="67" stroke="#58a6ff" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="492" y1="67" x2="524" y2="67" stroke="#58a6ff" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="754" y1="67" x2="786" y2="67" stroke="#58a6ff" stroke-width="2" marker-end="url(#ar)"/>
+
+        <g font-size="12" text-anchor="middle">
+          <text x="379" y="146" fill="#f85149">✕ 断点一：参数不在字段里</text>
+          <text x="641" y="146" fill="#d29922">△ 断点二：信任不可核验</text>
+          <text x="903" y="146" fill="#f85149">✕ 断点三：路径是购物车</text>
+        </g>
+        <text x="510" y="188" fill="#7d8996" font-size="12.5" text-anchor="middle">工业品买家的决策链在「看懂」和「询价」两处断掉：前者缺可比对的结构化参数，后者缺 RFQ 型入口</text>
+      </g>
+    </svg>
+    <div class="dnote">图：以工业品 B2B 采购决策链为标尺，标出本次抽样中内容最薄弱的环节。</div>
+  </div>
+</section>
+
+<!-- ② -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">02</span><h2>采样口径：看了什么、怎么算的</h2></div>
+  <p class="lead">本次抓取 26 个公开页面（含 3 个 404 探测），覆盖首页、栏目页、产品列表、产品详情、文章详情，并对下载文件做了 HEAD / 分块校验。所有字数、图片数、链接数均由页面 HTML 解析统计，可见文本不含脚本与样式。</p>
+  <div class="tw"><table>
+    <thead><tr><th>页面类型</th><th>packb2b</th><th>papercushion</th><th>shinerpack</th><th>用来判断什么</th></tr></thead>
+    <tbody>
+      <tr><td><strong>首页</strong></td><td>1</td><td>1</td><td>1</td><td>定位、TDK、H1、CTA 配比、导航与分类、图片 alt</td></tr>
+      <tr><td><strong>栏目页</strong></td><td>5（About / Blog / Download / Contact / Dealer）</td><td>4（About / Blog / Download / Sustainability）</td><td>4（同纯纸站）</td><td>信任内容、资料资产、博客规模、表单字段</td></tr>
+      <tr><td><strong>产品页 / 分类页</strong></td><td>2</td><td>1</td><td>1</td><td>参数表、长描述、应用场景、价格与 schema</td></tr>
+      <tr><td><strong>文章详情</strong></td><td>1</td><td>1</td><td>1</td><td>内容深度、更新时效、分类与转化钩子</td></tr>
+      <tr><td><strong>商店页探测</strong></td><td>1（404）</td><td>1（404）</td><td>1（404）</td><td>首页主 CTA 是否可达</td></tr>
+      <tr><td><strong>下载文件</strong></td><td colspan="3">3 个 Catalogue.pdf（HEAD + 前 1 MB 校验）</td><td>资料体积、更新日期、是否本地化</td></tr>
+    </tbody>
+  </table></div>
+  <div class="plainline"><span class="tag plain">边界</span> 这是<strong>公开页面内容盘点</strong>，不是运营审计：看不到 GA 流量、询盘量、转化率、内容排期与审稿流程，也无法判断 PDF 图文质量。所有"应该怎么做"属于基于工业品 B2B 通行做法的建议，不是对对方内部流程的推断。</div>
+</section>
+
+<!-- ③ -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">03</span><h2>内容家底盘点：三站到底有什么</h2></div>
+  <div class="tw"><table>
+    <thead><tr><th>内容维度</th><th>packb2b（英文主站）</th><th>papercushion（纯纸站）</th><th>shinerpack（中文站）</th></tr></thead>
+    <tbody>
+      <tr><td><strong>定位 / 语言标记</strong></td><td>全品类缓冲包装，<code>en-US</code> ✅</td><td>纸类垂直，内容英文但标 <code>zh-Hans</code> <span class="bad">✕</span></td><td>中文站，<code>zh-Hans</code>，但半中半英 <span class="warnc">△</span></td></tr>
+      <tr><td><strong>首页标题 / 描述</strong></td><td><code>Home - ShinerPack</code>；描述 447 字符，正文自动截取</td><td><code>Home - Paper Cushion</code>；描述 55 字符</td><td><code>Home - ShinerPack</code>；描述 55 字符（中文）</td></tr>
+      <tr><td><strong>首页可见文本</strong></td><td>约 1,453 英文词</td><td>约 1,048 英文词 + 少量中文</td><td>1,722 汉字 + 310 英文词</td></tr>
+      <tr><td><strong>首页分类 / 商品链接</strong></td><td><strong>35</strong> 个分类 / 27 个商品</td><td>10 / 10</td><td>10 / 10</td></tr>
+      <tr><td><strong>首页图片 / 有 alt</strong></td><td>114 / <span class="bad">4（3.5%）</span></td><td>100 / <span class="bad">3（3.0%）</span></td><td>100 / <span class="bad">3（3.0%）</span></td></tr>
+      <tr><td><strong>首页 H1</strong></td><td>3 个，含 <code>TitleWhy Choose ShinerPack</code> 占位</td><td>1 个，仍是 <code>TitleWhy Choose ShinerPack</code></td><td>1 个「笑纳包装的优势」</td></tr>
+      <tr><td><strong>首页 CTA（次）</strong></td><td>Add to cart 8 / Get a Sample 1 / Contact us 7</td><td>Add to cart 14 / Visit Shop 6 / Contact us 1</td><td>Add to cart 16 / 访问商店 5 / 联系我们 1</td></tr>
+      <tr><td><strong>产品页规格表</strong></td><td>4 项：Weight / Dimensions / Color（值为中文）/ specifications</td><td colspan="2"><span class="bad">2 项化妆品字段：Volume 20 ml、Skin Condition: Oily, Sensitive</span></td></tr>
+      <tr><td><strong>产品页正文</strong></td><td>50gsm、1cm×22/35/45cm、OEM/ODM、应用领域、省 80% 仓储</td><td>英文长描述 + 卖点，参数在段落中</td><td>牛皮纸、50g、1cm×22/35/45cm、25mm 未展开、适配 ≤100mm、应用领域</td></tr>
+      <tr><td><strong>博客</strong></td><td>列表 3 篇；抽查文章 2025-02-18、514 词</td><td>列表 5 篇；抽查 604 词</td><td>列表 4 篇；抽查 1,376 汉字，含 10 项设备参数表</td></tr>
+      <tr><td><strong>下载资料</strong></td><td>1 个 PDF，45.4 MB，2024-11-21</td><td>1 个 PDF，40.6 MB / 约 47 页，2024-11-21</td><td>1 个 PDF，40.6 MB，2025-03-22，<span class="bad">与纯纸站同一份文件</span></td></tr>
+      <tr><td><strong>信任内容</strong></td><td colspan="3">About 页：70+ 证书荣誉、17 项实用新型专利、1 项发明专利、ISO9001/14001、TUV ROHS、SGS、CE、MSDS、20,000+ 吨年销量；工厂 / 团队 / 展会照片</td></tr>
+      <tr><td><strong>可持续内容</strong></td><td>—</td><td colspan="2">行业宏观论证：全球 4 亿吨塑料 / 9% 回收率 / 66% 消费者溢价意愿 / 192 国中 127 国立法 / 60+ 国禁令税收；中文版译文通顺</td></tr>
+      <tr><td><strong>线索表单</strong></td><td colspan="3">姓名 / 邮箱 / 电话 / 留言 / 附件 + 5 个兴趣勾选；<span class="bad">无公司名、国家、采购数量、应用场景、期望交期</span></td></tr>
+      <tr><td><strong>跨站关系</strong></td><td colspan="3">canonical 各站自指；<span class="bad">hreflang 0 条</span>；纯纸站与中文站页脚的 About / Contact 链接指向 packb2b.com</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="card green">
+    <p class="big-quote" style="font-size:17px">先说公道话：内容底子并不差</p>
+    <div class="grid2">
+      <ul class="clean">
+        <li><b>技术信息是有的</b>：50gsm、克重、幅宽、未展开厚度、适配直径、速度 3m/min、功率 110–220V 等，都写进了页面，不是空壳站。</li>
+        <li><b>应用场景意识不错</b>：英文站产品页有「Application areas」「省 80% 仓储」，中文站写清了酒瓶、玻璃、电子、器皿等易碎品场景。</li>
+        <li><b>信任素材丰富</b>：专利数量、认证清单、工厂 / 团队 / 展会照片、经销商 8 条权益（研发、定制、大客户、营销物料、价格支持）。</li>
+      </ul>
+      <ul class="clean">
+        <li><b>有指南型内容</b>：「纸板膨切机终极指南」「蜂窝纸信封袋的成本优势」是选型 / 评估阶段该做的选题，不只是公司新闻。</li>
+        <li><b>可持续叙事完整</b>：从塑料危机数据到欧盟法规再到自家方案，逻辑链是通的，中文翻译质量明显高于站内其余文案。</li>
+        <li><b>结构化数据基本就位</b>：Product / Offer / BlogPosting / Organization / BreadcrumbList 都已输出，只是字段值需要修。</li>
+      </ul>
+    </div>
+    <div class="plainline" style="margin-top:14px">所以问题不是"没内容"，而是<strong>内容放错容器、缺少标准与责任人</strong>——这也是最容易在 1–2 个月内见效的部分。</div>
+  </div>
+</section>
+
+<!-- ④ -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">04</span><h2>六个结构性问题（按优先级）</h2></div>
+
+  <div class="risk h">
+    <div class="rt"><span class="tag hi">P0</span> 1. 用 B2C 零售壳装 B2B 工业品</div>
+    <div class="ev"><span class="tag tech">实测</span> 首页 <code>Add to cart</code> 出现 <b>8 / 14 / 16</b> 次，<code>Get a Sample</code> 仅英文站 1 次，<code>Request a Quote</code> 三站 0 次。产品页标 <code>$0.15</code>、<code>$2,300.00</code> 单件价与划线促销价，Product schema 里 <code>Offer.price=0.15 / 0.21 USD</code>、<code>priceValidUntil=2027-12-31</code>。纸垫机、膨切机这类设备同样走购物车与「促销」。</div>
+    <div class="rb"><span class="tag plain">说人话</span> 工业品买家要的是报价、打样、规格书、交期和兼容性确认，不会把一台 2,300 美元的机器加进购物车结账；单件零售价还会让批量采购客户误判价位。</div>
+    <div class="fix"><b>怎么改</b>：主 CTA 换成 Request a Quote / Get a Sample / Download Spec Sheet；价格改「Price on request / 阶梯价」，隐藏或弱化购物车；设备类增加「预约试机 / 索取方案 / 耗材搭配」入口，并把 Offer 改成可询价标记而非演示价。</div>
+  </div>
+
+  <div class="risk h">
+    <div class="rt"><span class="tag hi">P0</span> 2. 首页最显眼的按钮指向 404</div>
+    <div class="ev"><span class="tag tech">实测</span> 纯纸站「Visit Shop」「Learn More」、中文站「访问商店」「了解更多」均指向 <code>/shop/</code>，实测 <b>HTTP 404</b>（711 字节）；而导航里的商城实际走 <code>?page_id=1048</code>。</div>
+    <div class="rb"><span class="tag plain">说人话</span> 首页主 CTA 把最有意愿的客户直接送到死路，前面所有内容投入在这一步归零。</div>
+    <div class="fix"><b>怎么改</b>：统一按钮指向有效商城 / 分类页；上线前跑一次全站链接巡检，把 404、跨站跳转、空锚点一起清掉。</div>
+  </div>
+
+  <div class="risk h">
+    <div class="rt"><span class="tag hi">P0</span> 3. 参数写在错误的位置，规格字段还串了类目</div>
+    <div class="ev"><span class="tag tech">实测</span> 纯纸站与中文站「蜂巢纸保护套」的 WooCommerce 属性表是 <code>Volume 20 ml</code> / <code>Skin Condition: Oily, Sensitive</code>（化妆品演示模板残留）；真正有用的参数（牛皮纸、50g、1cm×22/35/45cm、25mm 未展开、适配 ≤100mm）写在长段落里并重复两遍。英文站属性值是中文（<code>粉色, 红色, 蓝色</code>）。全站最完整的 10 项设备参数表（PQ-C425：3m/min、425mm 进料、110–220V、净重 33KG…）出现在<strong>博客文章</strong>里，不在产品页。三站 Product schema 的 <code>description</code> 填的是 <code>.mp4</code> 视频 URL（中文站还是 <code>http://</code> 明文）。</div>
+    <div class="rb"><span class="tag plain">说人话</span> 搜索引擎、AI 问答和采购比价工具读到的"产品规格"是「适合油性敏感肌」；买家需要的参数藏在长文和图片里，既没法比对，也没法被引用。</div>
+    <div class="fix"><b>怎么改</b>：建统一属性字典（材质 / 克重 / 幅宽 / 长度 / 厚度 / 颜色 / 装箱数 / 净重 / 功率 / 速度 / MOQ / 交期 / 认证 / HS 编码），产品页用表格输出并同步到 <code>additionalProperty</code>；把博客里的参数表搬回对应产品页；修正 <code>Product.description</code> 为文字摘要。</div>
+  </div>
+
+  <div class="risk m">
+    <div class="rt"><span class="tag md">P1</span> 4. 三站重复内容没有主从，本地化只做了一半</div>
+    <div class="ev"><span class="tag tech">实测</span> About / 可持续发展 / 下载三页的 H2 逐条对应，产品标题一一对应，博客文章 ID <code>3303 / 3268 / 3215</code> 在两站相同——数据库克隆后翻译。中文站首页标题仍是 <code>Home - ShinerPack</code>，导航保留 <code>Home</code> / <code>Sustainable Packaging</code> / <code>Download</code> / <code>PRIVACY POLICY &amp; TERMS</code>，页脚四大卖点 <code>Fast Dispatch / Support Customization / Design Team / Quality Assurance</code> 全英文，产品页 meta description 仍是英文，分类名写成 <code>HoneycombPaper</code> / <code>EnvelopeBag</code> 连写，分类页标题写成「服务分类」；货币 USD、尺寸 <code>164 FT X 1.64”</code>。纯纸站内容全英文却标 <code>lang=zh-Hans</code>，表单与评论区残留中文。两站页脚 About / Contact 链接指回 packb2b.com。三站 <b>hreflang 0 条</b>、canonical 各站自指。中文站与纯纸站的目录 PDF 前 1 MB 校验值完全一致，是<b>同一份英文文件</b>。</div>
+    <div class="rb"><span class="tag plain">说人话</span> 谷歌看到三份几乎一样的页面却不知道该推哪个，权重互相稀释；中文客户看到英文导航、美元价和英寸单位，很难相信这是为他准备的站。</div>
+    <div class="fix"><b>怎么改</b>：先定角色——packb2b 作国际主站，shinerpack 作中文站，papercushion 要么做真正的纸类垂直内容（差异化产品线 + 独立文案），要么 301 合并；补 hreflang 与跨站 canonical；建中英术语表，把导航、页脚、TDK、货币、单位、日期、表单、下载文件一次性本地化；清掉跨站串链与演示分类。</div>
+  </div>
+
+  <div class="risk m">
+    <div class="rt"><span class="tag md">P1</span> 5. 信任内容有料，但不可核验、不可下载</div>
+    <div class="ev"><span class="tag tech">实测</span> About 页写「70+ Piece Certificates And Honors」「17 utility model patents」「IS09001 / IS014001」（字母 O 写成数字 0）、「Germany TUVROHS」（少空格）、「50,0000+」（数字格式错）、「20000+ Of / Tons Annual Sales」（单位串位）。认证只出现在这段文字里：<b>没有编号、发证机构、有效期、扫描件</b>；产品页没有 FSC / 可回收 / 降解标识；下载页全站只有 1 个 40–45 MB 的整本目录（约 47 页，最近更新 2024-11 / 2025-03），没有单品规格书、TDS、MSDS、测试报告。</div>
+    <div class="rb"><span class="tag plain">说人话</span> 采购审厂和合规审核要的是可下载、可核对的文件；只有一段自夸文字，反而降低可信度。40 MB 的整本目录对海外移动网络也几乎不可用。</div>
+    <div class="fix"><b>怎么改</b>：建「证书与合规中心」（编号 / 机构 / 有效期 / PDF / 适用产品）；先把文案里的拼写与数字格式修正，把「70+」换成可核对清单；按品类拆 3–5 MB 以内的规格书与 TDS，标注版本号和更新日期；补跌落 / 缓冲测试数据、可回收与降解声明、REACH / RoHS 符合性文件。</div>
+  </div>
+
+  <div class="risk m">
+    <div class="rt"><span class="tag md">P1</span> 6. 机器不可读 + 转化链路断裂</div>
+    <div class="ev"><span class="tag tech">实测</span> 图片 alt 覆盖率 3.5% / 3.0% / 3.0%；首页 H1 3 个且含 <code>TitleWhy Choose ShinerPack</code>；meta description 447 / 55 / 55 字符且由正文截取；模板残留 <code>Lorem ipsum dolor sit amet…</code>（纯纸站与中文站几乎每页）、<code>Sample text</code>（英文站菜单）、<code>Haven't You Forgotten Something?</code>、博客分类 <code>Health, How To, Interviews</code>。询盘表单仅 5 个可见字段；文章有 BlogPosting schema，但正文无 CTA、无相关产品、无资料下载；抽查文章日期为 2024-07 与 2025-02，距本次采样已 21–28 个月。</div>
+    <div class="rb"><span class="tag plain">说人话</span> 内容既不容易被搜索与 AI 引用，也没给读者下一步动作；即便来了询盘，销售也分不清对方是经销商、贸易商还是终端，得来回追问几轮。</div>
+    <div class="fix"><b>怎么改</b>：批量补 alt（产品名 + 型号 + 场景）、每页单 H1、手写首页与核心产品页 TDK、清占位文案；表单补 6 个 B2B 字段并做分级 CTA；每篇博客末尾固定挂「相关产品 / 获取规格书 / 索取样品」；建立季度更新机制。</div>
+  </div>
+</section>
+
+<!-- ⑤ -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">05</span><h2>按工业品 B2B 内容标准对照</h2></div>
+  <p class="lead">下表以工业品独立站常见的内容要求为标尺逐项核对。等级为本次 26 页抽样的定性判断（<span class="good">✔ 基本具备</span> / <span class="warnc">△ 有但不成型</span> / <span class="bad">✕ 缺失或错位</span>），用于横向比较，不是行业基准评分。</p>
+  <div class="tw"><table>
+    <thead><tr><th>内容维度</th><th>工业品买家要什么</th><th>packb2b</th><th>papercushion</th><th>shinerpack</th></tr></thead>
+    <tbody>
+      <tr><td><strong>产品信息完整度</strong></td><td>结构化参数、选型依据、应用场景、兼容性</td><td class="warnc">△ 长描述有料，字段没接住</td><td class="bad">✕ 属性表串类目</td><td class="warnc">△ 中文参数细，但只在段落里</td></tr>
+      <tr><td><strong>信任与合规</strong></td><td>可核验证书、测试报告、工厂与产能证据</td><td class="warnc">△ 只有文字清单</td><td class="warnc">△ 同左</td><td class="warnc">△ 同左，且缺中文目录</td></tr>
+      <tr><td><strong>采购转化路径</strong></td><td>RFQ / 打样 / 阶梯价 / 交期 /  qualified 表单</td><td class="bad">✕ 购物车 + 演示价</td><td class="bad">✕ 主 CTA 404</td><td class="bad">✕ 主 CTA 404</td></tr>
+      <tr><td><strong>内容资产与更新</strong></td><td>选型指南、对比、案例、FAQ、按品类拆的资料</td><td class="warnc">△ 3 篇 + 1 本大目录</td><td class="bad">✕ 5 篇 + 同一本目录</td><td class="warnc">△ 有指南型长文，更新停滞</td></tr>
+      <tr><td><strong>多语言与本地化</strong></td><td>术语统一、货币 / 单位 / 日期 / 文件本地化</td><td class="good">✔ 英文一致</td><td class="bad">✕ lang 与内容矛盾</td><td class="bad">✕ 半中半英</td></tr>
+      <tr><td><strong>机器可读与 SEO 内容</strong></td><td>TDK、单 H1、alt、正确的 Product / FAQ schema</td><td class="bad">✕ 3 个 H1、alt 3.5%</td><td class="bad">✕ alt 3%、H1 占位</td><td class="bad">✕ alt 3%、描述英文</td></tr>
+      <tr><td><strong>内容治理</strong></td><td>主从站关系、去重、术语表、更新责任人</td><td class="bad">✕ 无 hreflang</td><td class="bad">✕ 克隆 + 跨站串链</td><td class="bad">✕ 克隆 + 英文 PDF</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="bars">
+    <div class="barrow"><span>packb2b 综合成熟度</span><div class="bartrack"><div class="barfill" style="width:42%"></div></div><span class="barval">2.1 / 5</span></div>
+    <div class="barrow"><span>papercushion</span><div class="bartrack"><div class="barfill b2" style="width:28%"></div></div><span class="barval">1.4 / 5</span></div>
+    <div class="barrow"><span>shinerpack</span><div class="bartrack"><div class="barfill b3" style="width:32%"></div></div><span class="barval">1.6 / 5</span></div>
+  </div>
+  <div class="dnote">综合分 = 七个维度 0–5 分定性打分的均值，仅用于三站横向比较，不代表绝对值或行业排名。英文主站领先主要靠更全的分类与更完整的产品长描述。</div>
+</section>
+
+<!-- ⑥ -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-num">06</span><h2>内容改造路线图</h2></div>
+  <p class="lead">建议按「先止损、再立标准、后做增量」推进。技术侧的固定链接、sitemap、HTTPS 等改造见配套《独立站技术分析报告》，两者应同批上线——内容结构改了而 URL 与地图没跟上，等于白改。</p>
+
+  <div class="phase">
+    <div class="ph">PHASE 1 · 1–2 周</div><div class="pt">止血：把已写好的内容放对位置</div>
+    <ol class="steps">
+      <li><b>修可达性</b>：首页主 CTA 指向有效商城 / 分类页；清理 <code>Lorem ipsum</code>、<code>Sample text</code>、<code>TitleWhy Choose…</code>、<code>ShopNew</code>、演示博客分类等占位内容。</li>
+      <li><b>修机器可读</b>：核心 20 个 SKU 补 alt、每页单 H1、手写 TDK、把 <code>Product.description</code> 从视频 URL 改成文字摘要。</li>
+      <li><b>修线索质量</b>：询盘表单补公司名 / 国家 / 采购数量 / 应用场景 / 期望交期 / 采购角色，配好 SMTP 并真实发一封测试询盘。</li>
+      <li><b>修信任文案</b>：纠正 IS09001 / IS014001 / 50,0000+ / TUVROHS / 单位串位等低级错误。</li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="ph">PHASE 2 · 3–6 周</div><div class="pt">立标准：一套字典、一个主站、一批可下载文件</div>
+    <ol class="steps">
+      <li><b>定站与去重</b>：packb2b = 国际主站、shinerpack = 中文站、papercushion 二选一（差异化垂直内容或 301 合并）；补 hreflang / canonical，清跨站串链。</li>
+      <li><b>建产品属性字典</b>：14 类字段统一命名与单位，把博客与长图里的参数搬回产品页表格；先覆盖销量前 20 个 SKU。</li>
+      <li><b>建证书与资料中心</b>：证书可核验清单 + 按品类拆分的规格书 / TDS / MSDS（单份 ≤5 MB、带版本与日期）+ 中文版目录。</li>
+      <li><b>本地化收尾</b>：术语表、导航 / 页脚 / TDK、货币与单位、表单与邮件模板、下载文件一次性对齐。</li>
+    </ol>
+  </div>
+
+  <div class="phase">
+    <div class="ph">PHASE 3 · 持续</div><div class="pt">做增量：围绕采购决策链补内容，而不是补页数</div>
+    <ol class="steps">
+      <li><b>选型与对比</b>：纸缓冲 vs 气泡膜成本对照、机型选型矩阵（产能 / 幅宽 / 场地 / 耗材）、"省 80% 仓储"的可复算计算器。</li>
+      <li><b>行业场景页</b>：易碎品 / 酒类 / 3C 电子 / 电商仓储 / 冷链各一页，写清包装方案、耗材搭配、实测效果与客户案例。</li>
+      <li><b>设备全生命周期内容</b>：试机视频、安装与耗材更换、维护与故障排查、备件清单、保修与交期说明。</li>
+      <li><b>更新机制</b>：博客季度更新并固定挂 CTA 与内链；目录与规格书带版本号，季度核对一次链接与认证有效期。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ⑦ -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-num">07</span><h2>可直接抄的两张清单</h2></div>
+  <div class="grid2">
+    <div class="card">
+      <p class="big-quote" style="font-size:17px">A. 工业品产品页字段清单</p>
+      <ul class="chk">
+        <li><b>识别层</b>：产品名 + 型号（统一命名规则）、SKU、所属分类、适用行业</li>
+        <li><b>技术层</b>：材质、克重、幅宽 / 长度 / 厚度、颜色、净重、功率、速度、产能</li>
+        <li><b>应用层</b>：适用场景、不适用场景、兼容设备与耗材、包装 / 存储条件</li>
+        <li><b>商务层</b>：MOQ、阶梯价或「询价」、交期、装箱量、HS 编码、起运港、付款方式、样品政策</li>
+        <li><b>信任层</b>：认证编号与文件、测试报告、专利、质保期、工厂与产能数据</li>
+        <li><b>转化层</b>：索取报价、索取样品、下载规格书、预约试机（四个入口，不止一个）</li>
+        <li><b>机器层</b>：TDK、单 H1、图片 alt、Product + additionalProperty、FAQ schema</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="big-quote" style="font-size:17px">B. B2B 询盘表单字段清单</p>
+      <ul class="chk">
+        <li><b>已有</b>：姓名、邮箱、电话、留言、附件、产品兴趣勾选</li>
+        <li><b>必加</b>：公司名称、国家 / 地区、采购角色（终端 / 经销 / 贸易）</li>
+        <li><b>必加</b>：目标产品与型号、预计采购数量、期望交期 / 项目时间</li>
+        <li><b>建议</b>：应用场景或包装物件、是否需要样品、是否需要定制 / OEM</li>
+        <li><b>机制</b>：按产品自动带出型号、提交后自动回执 + 资料下载、进 CRM 打标签</li>
+        <li><b>合规</b>：隐私政策勾选项、邮件送达实测（当前纯纸站域名无 MX，见技术报告）</li>
+      </ul>
+      <div class="plainline" style="margin-top:12px">一条经验：多 6 个字段会略微降低提交率，但能显著减少销售来回追问的轮次——工业品线索的价值在质量，不在条数。</div>
+    </div>
+  </div>
+
+  <div class="tw"><table>
+    <thead><tr><th>决策阶段</th><th>买家在问什么</th><th>该补的内容形式</th><th>三站现状</th></tr></thead>
+    <tbody>
+      <tr><td><strong>认知</strong></td><td>纸缓冲能替代气泡膜吗？</td><td>指南型文章、环保法规解读、成本科普</td><td class="warnc">有零散文章，可持续页写得较完整</td></tr>
+      <tr><td><strong>评估</strong></td><td>哪个型号适合我的产线？</td><td>选型矩阵、参数对比表、试机视频、FAQ</td><td class="bad">参数分散在长文 / 博客 / 长图</td></tr>
+      <tr><td><strong>决策</strong></td><td>这家工厂靠谱吗？能过审吗？</td><td>证书中心、测试报告、客户案例、产能与交期</td><td class="bad">仅 About 一段文字，无文件可下载</td></tr>
+      <tr><td><strong>采购 / 复用</strong></td><td>怎么下单、耗材怎么配、坏了找谁？</td><td>RFQ 流程、样品政策、耗材搭配、维护与备件</td><td class="bad">购物车 + 5 字段表单，售后内容缺失</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ⑧ -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-num">08</span><h2>方法与边界</h2></div>
+  <div class="grid2">
+    <div class="mini"><div class="h">做了什么</div><div class="b">公开 GET 抓取 3 站共 26 个页面（首页、About / Blog / Download / Contact / Dealer / Sustainability、产品分类与详情、文章详情、商店页探测）；解析可见文本、标题层级、TDK、内外链、图片 alt、表单字段、JSON-LD 与 WooCommerce 属性表；对 3 个目录 PDF 做 HEAD 与分块校验；统计分类 / 商品 / CTA 出现次数。</div></div>
+    <div class="mini"><div class="h">没做什么 / 不能确定</div><div class="b">未登录后台、未提交表单、未做漏洞或性能测试、未评估 PDF 内页图文质量；看不到流量、排名、询盘量、转化率、内容排期与责任人。抽样页面不等于全站，"产品总数""博客总篇数"仅按首页与列表页链接计数。机器指标受 Cloudflare 缓存与页面重复渲染（桌面 / 移动双份）影响，适合横向比较而非绝对精确值。</div></div>
+  </div>
+  <div class="foot">
+    三个独立站内容分析报告 · 2026-11-11 · 配套《独立站技术分析报告》阅读<br>
+    分析对象：www.packb2b.com · www.papercushion.com · www.shinerpack.com（均为公开可访问页面）
+  </div>
+</section>
+
+</div>
+</body>
+</html>

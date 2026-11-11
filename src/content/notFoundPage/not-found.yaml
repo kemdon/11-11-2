@@ -1,0 +1,6 @@
+seoTitle: 404 - Page Not Found
+code: '404'
+message: Page not found
+detail: The page you are looking for does not exist or has been moved.
+homeLabel: Return Home
+homeHref: /

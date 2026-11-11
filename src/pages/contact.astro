@@ -1,0 +1,190 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getLocaleConfig, getSiteSettings } from '../lib/site-content';
+
+const { defaultLocale } = await getLocaleConfig();
+const site = await getSiteSettings(defaultLocale);
+
+const channels = [
+  { label: '电话', value: '0769-83350356', href: 'tel:076983350356', note: '工作日商务咨询' },
+  { label: '邮箱', value: 'shiner@shinerpack.com', href: 'mailto:shiner@shinerpack.com', note: '询盘、样品与定制需求' },
+  { label: '英文主站', value: 'www.packb2b.com', href: 'https://www.packb2b.com', note: '海外产品与业务信息' },
+  { label: '环保纸站', value: 'www.papercushion.com', href: 'https://www.papercushion.com', note: '环保纸包装产品信息' },
+];
+---
+
+<Layout
+  title="联系我们 | 笑纳包装 ShinerPack"
+  description="联系广东笑纳包装有限公司：电话 0769-83350356，邮箱 shiner@shinerpack.com，办公与生产基地位于广东省东莞市大岭山镇马蹄岗华表街1号龙圣工业园。"
+  lang={defaultLocale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  ogImage={site.defaultOgImage}
+>
+  <Navbar site={site} locale={defaultLocale} currentPath="/contact" />
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="面包屑"><a href="/">首页</a><span>/</span><span>联系我们</span></nav>
+        <span class="eyebrow">GET IN TOUCH</span>
+        <h1>把包装需求，<br />交给<span>做产品的人</span></h1>
+        <p class="lead">无论是样品、规格表、定制规格与印刷，还是设备选型与现场包装方案，都欢迎直接与我们联系。</p>
+      </div>
+    </section>
+
+    <section class="section contact-main">
+      <div class="container contact-grid">
+        <div class="contact-info">
+          <span class="eyebrow">CONTACT CHANNELS</span>
+          <h2 class="section-title">联系方式</h2>
+          <div class="channel-list">
+            {channels.map((item) => (
+              <a class="channel" href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+                <small>{item.note}</small>
+                <i aria-hidden="true">↗</i>
+              </a>
+            ))}
+          </div>
+
+          <div class="address-block">
+            <h3>办公与生产基地</h3>
+            <p><span>办公地址</span>广东省东莞市大岭山镇马蹄岗华表街 1 号龙圣工业园 F 栋</p>
+            <p><span>生产基地</span>广东省东莞市大岭山镇马蹄岗华表街 1 号龙圣工业园 F、E、A 栋</p>
+            <p class="address-en">Guangdong Shiner Packaging Co., Ltd. · Dalingshan Town, Dongguan, Guangdong, China</p>
+          </div>
+        </div>
+
+        <div class="inquiry">
+          <span class="eyebrow">SEND AN INQUIRY</span>
+          <h2>填写询盘信息</h2>
+          <p class="inquiry-note">提交后会打开您的邮件客户端，并将以下内容整理成一封发给 shiner@shinerpack.com 的邮件；本站为静态展示站，不会在服务器保存表单内容。</p>
+          <form id="inquiry-form" class="inquiry-form">
+            <div class="field-row">
+              <label>姓名 / 称呼<input name="name" type="text" required autocomplete="name" placeholder="请输入您的姓名" /></label>
+              <label>公司名称<input name="company" type="text" autocomplete="organization" placeholder="请输入公司名称" /></label>
+            </div>
+            <div class="field-row">
+              <label>联系邮箱<input name="email" type="email" required autocomplete="email" placeholder="name@company.com" /></label>
+              <label>需求类型
+                <select name="topic">
+                  <option value="产品样品与规格表">产品样品与规格表</option>
+                  <option value="定制规格与印刷">定制规格与印刷</option>
+                  <option value="包装设备选型">包装设备选型</option>
+                  <option value="现场包装方案">现场包装方案</option>
+                  <option value="区域经销合作">区域经销合作</option>
+                </select>
+              </label>
+            </div>
+            <label>需求说明<textarea name="message" rows="5" required placeholder="请简要描述产品、包装场景、预计数量或设备需求"></textarea></label>
+            <button class="btn btn--solid" type="submit">生成询盘邮件 <span class="arrow" aria-hidden="true">↗</span></button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark distributor">
+      <div class="container distributor-grid">
+        <div class="distributor-media">
+          <div class="image-frame"><img src="/images/hands.webp" alt="包装工人用蜂窝纸包裹玻璃瓶的真实作业场景" width="2000" height="1500" loading="eager" /></div>
+        </div>
+        <div class="distributor-copy">
+          <span class="eyebrow">GLOBAL DISTRIBUTOR NETWORK</span>
+          <h2 class="section-title">我们正在建立<br /><span class="accent">全球的经销商网络</span></h2>
+          <p class="lead">如果您在某个国家或区域拥有包装材料市场经验，或在电子商务领域拥有经验，可以成为我们在特定国家的区域性战略合作伙伴。</p>
+          <ul class="distributor-points">
+            <li>强大创新研发，不断推出新包装产品</li>
+            <li>源头工厂价格与灵活的定制服务</li>
+            <li>大型客户现场包装解决方案与作业系统</li>
+            <li>营销素材、促销价格与销售奖励支持</li>
+          </ul>
+          <a class="btn btn--outline" href="mailto:shiner@shinerpack.com?subject=%E5%8C%BA%E5%9F%9F%E7%BB%8F%E9%94%80%E5%90%88%E4%BD%9C%E5%92%A8%E8%AF%A2">洽谈经销合作 <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer site={site} locale={defaultLocale} />
+</Layout>
+
+<script>
+  const form = document.getElementById('inquiry-form');
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    const get = (key: string) => String(data.get(key) || '').trim();
+    const subject = `[网站询盘] ${get('topic')} · ${get('company') || get('name')}`;
+    const body = [
+      `姓名：${get('name')}`,
+      `公司：${get('company') || '未填写'}`,
+      `邮箱：${get('email')}`,
+      `需求类型：${get('topic')}`,
+      '',
+      '需求说明：',
+      get('message'),
+    ].join('\n');
+    window.location.href = `mailto:shiner@shinerpack.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>
+
+<style>
+  .page-hero { background: var(--ink); color: var(--white); padding-top: calc(var(--header-h) + 76px); padding-bottom: 92px; }
+  .crumbs { display: flex; gap: 12px; margin-bottom: 40px; font-size: 12px; color: rgba(255, 255, 255, 0.45); }
+  .crumbs a:hover { color: var(--white); }
+  .page-hero .eyebrow { color: var(--kraft-light); }
+  .page-hero h1 { margin-top: 24px; font-size: clamp(2.7rem, 6vw, 5rem); line-height: 1.14; letter-spacing: -0.045em; }
+  .page-hero h1 span { color: var(--kraft-light); }
+  .page-hero .lead { margin-top: 26px; max-width: 58ch; color: rgba(255, 255, 255, 0.7); }
+
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(50px, 8vw, 110px); }
+  .channel-list { margin-top: 40px; border-top: 1px solid var(--line); }
+  .channel { position: relative; display: grid; gap: 4px; padding: 20px 34px 20px 0; border-bottom: 1px solid var(--line); }
+  .channel:hover { padding-left: 8px; }
+  .channel > span { font-size: 11px; letter-spacing: 0.14em; color: var(--clay); }
+  .channel strong { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: 0.01em; }
+  .channel small { font-size: 12px; color: var(--muted); }
+  .channel i { position: absolute; right: 4px; top: 24px; font-style: normal; color: var(--clay); font-size: 17px; }
+
+  .address-block { margin-top: 42px; padding: 28px; background: var(--paper-deep); border-left: 2px solid var(--kraft); }
+  .address-block h3 { font-size: 17px; margin-bottom: 16px; }
+  .address-block p { display: grid; grid-template-columns: 70px 1fr; gap: 10px; font-size: 13px; line-height: 1.85; color: var(--muted); margin-bottom: 10px; }
+  .address-block p span { color: var(--forest); font-weight: 600; }
+  .address-en { display: block !important; margin-top: 16px; font-family: var(--font-display); font-size: 11px !important; color: var(--muted); }
+
+  .inquiry { padding: 38px; background: var(--paper-card); border: 1px solid rgba(20, 35, 30, 0.1); }
+  .inquiry h2 { margin-top: 18px; font-size: 28px; }
+  .inquiry-note { margin-top: 14px; font-size: 12.5px; line-height: 1.85; color: var(--muted); }
+  .inquiry-form { display: grid; gap: 18px; margin-top: 28px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .inquiry-form label { display: grid; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; }
+  .inquiry-form input, .inquiry-form select, .inquiry-form textarea {
+    width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 2px;
+    background: var(--white); color: var(--text); font-family: var(--font-sans); font-size: 14px; font-weight: 400;
+    outline: none; transition: border-color 0.25s var(--ease);
+  }
+  .inquiry-form input:focus, .inquiry-form select:focus, .inquiry-form textarea:focus { border-color: var(--forest); }
+  .inquiry-form textarea { resize: vertical; min-height: 120px; }
+  .inquiry-form .btn { justify-self: start; cursor: pointer; border: 0; }
+
+  .distributor-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(50px, 7vw, 100px); align-items: center; }
+  .distributor-media .image-frame { aspect-ratio: 4 / 3.6; }
+  .distributor-copy .lead { margin-top: 26px; }
+  .distributor-points { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; margin-top: 36px; margin-bottom: 36px; }
+  .distributor-points li { position: relative; padding-left: 20px; font-size: 13px; line-height: 1.8; color: rgba(246, 242, 233, 0.72); }
+  .distributor-points li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; background: var(--kraft-light); border-radius: 50%; }
+
+  @media (max-width: 900px) {
+    .contact-grid, .distributor-grid { grid-template-columns: 1fr; gap: 46px; }
+  }
+  @media (max-width: 620px) {
+    .inquiry { padding: 24px; }
+    .field-row { grid-template-columns: 1fr; }
+    .distributor-points { grid-template-columns: 1fr; }
+    .address-block p { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>

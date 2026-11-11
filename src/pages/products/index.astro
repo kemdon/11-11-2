@@ -1,0 +1,177 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import {
+  getLocaleConfig,
+  getProducts,
+  getProductsPage,
+  getSiteSettings,
+} from '../../lib/site-content';
+
+const { defaultLocale } = await getLocaleConfig();
+const site = await getSiteSettings(defaultLocale);
+const allProducts = await getProducts(defaultLocale, site.defaultLocale);
+const page = await getProductsPage(defaultLocale, site.defaultLocale);
+
+const order = [
+  'honeycomb-mailer', 'kraft-mailer', 'bubble-mailer', 'honeycomb-sleeve',
+  'honeycomb-roll', 'honeycomb-sheet', 'kraft-paper-roll', 'kraft-paper-tape',
+  'honeycomb-insert', 'boxed-honeycomb',
+  'heavy-pad-machine', 'paper-pad-machine', 'bubble-paper-machine',
+  'honeycomb-dispenser', 'manual-dispenser', 'cardboard-shredder',
+];
+const products = order
+  .map((slug) => allProducts.find((product) => product.slug === slug))
+  .filter(Boolean);
+
+const groups = [
+  {
+    no: '01',
+    title: '环保纸缓冲包装',
+    en: 'PAPER CUSHIONING',
+    body: '100% 纸质材料，可回收、可生物降解，替代塑料气泡袋与塑料填充物。',
+    items: products.filter((product) => product.brand !== '包装机械'),
+  },
+  {
+    no: '02',
+    title: '包装机械设备',
+    en: 'PACKAGING MACHINES',
+    body: '从桌面型到产线级设备，实现纸垫、压泡纸、蜂窝纸的即做即用。',
+    items: products.filter((product) => product.brand === '包装机械'),
+  },
+];
+---
+
+<Layout
+  title={page.seoTitle || page.title}
+  description={page.seoDescription || page.body || site.defaultMetaDescription}
+  lang={defaultLocale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  ogImage={site.defaultOgImage}
+>
+  <Navbar site={site} locale={defaultLocale} currentPath="/products" />
+
+  <main>
+    <section class="page-hero">
+      <div class="container page-hero-inner">
+        <div>
+          <nav class="crumbs" aria-label="面包屑"><a href="/">首页</a><span>/</span><span>{page.title}</span></nav>
+          <span class="eyebrow">{page.kicker || 'PRODUCT RANGE'}</span>
+          <h1>{page.title}</h1>
+          <p class="lead">{page.body}</p>
+        </div>
+        <div class="page-hero-aside">
+          <span class="aside-no">02</span>
+          <p>环保纸缓冲包装<br />包装机械设备</p>
+          <span class="aside-line"></span>
+          <p class="aside-en">FROM MATERIAL TO MACHINE</p>
+        </div>
+      </div>
+    </section>
+
+    {groups.map((group) => (
+      <section class:list={['section group', { 'group--alt': group.no === '02' }]} id={`group-${group.no}`}>
+        <div class="container">
+          <div class="group-head">
+            <div class="group-head-title">
+              <span class="number-tag">{group.no} / SERIES</span>
+              <h2>{group.title}</h2>
+              <span class="group-en">{group.en}</span>
+            </div>
+            <div class="group-head-side">
+              <p>{group.body}</p>
+              <span>{String(group.items.length).padStart(2, '0')} 个产品</span>
+            </div>
+          </div>
+
+          {group.items.length > 0 ? (
+            <div class="product-grid">
+              {group.items.map((product, index) => (
+                <ProductCard
+                  title={product.title}
+                  brand={product.brand}
+                  englishName={product.englishName}
+                  oneLiner={product.oneLiner}
+                  keywords={product.keywords}
+                  mainImage={product.mainImage}
+                  slug={product.slug || ''}
+                  index={index}
+                  wide={index === 0}
+                />
+              ))}
+            </div>
+          ) : (
+            <p class="empty-note">{page.emptyNote}</p>
+          )}
+        </div>
+      </section>
+    ))}
+
+    <section class="section section--tight catalogue-cta">
+      <div class="container catalogue-inner">
+        <div>
+          <span class="eyebrow">FULL CATALOGUE</span>
+          <h2 class="section-title">需要完整规格表与定制方案？</h2>
+        </div>
+        <div class="catalogue-side">
+          <p class="lead">产品册中还有盒装 3D 蜂巢纸、瓦楞纸包装、新型水果纸托、格拉辛纸、雪梨纸、纸缠绕膜与冷链保温衬片等纸类创新产品。规格、颜色、印刷与数量均可按需定制。</p>
+          <a class="btn btn--light" href="/contact">索取产品册与报价 <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer site={site} locale={defaultLocale} />
+</Layout>
+
+<style>
+  .page-hero { background: var(--ink); color: var(--white); padding-top: calc(var(--header-h) + 76px); padding-bottom: 88px; position: relative; overflow: hidden; }
+  .page-hero::after { content: ""; position: absolute; right: -8%; top: -40%; width: 46%; aspect-ratio: 1; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 50%; }
+  .page-hero-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 60px; align-items: end; }
+  .crumbs { display: flex; gap: 12px; margin-bottom: 40px; font-size: 12px; color: rgba(255, 255, 255, 0.45); }
+  .crumbs a:hover { color: var(--white); }
+  .page-hero .eyebrow { color: var(--kraft-light); }
+  .page-hero h1 { margin-top: 24px; font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.1; letter-spacing: -0.045em; }
+  .page-hero .lead { margin-top: 24px; max-width: 54ch; color: rgba(255, 255, 255, 0.68); }
+  .page-hero-aside { justify-self: end; text-align: right; }
+  .aside-no { font-family: var(--font-display); font-size: 76px; line-height: 1; color: rgba(221, 191, 144, 0.28); }
+  .page-hero-aside p { margin-top: 14px; font-size: 14px; line-height: 1.9; color: rgba(255, 255, 255, 0.72); }
+  .aside-line { display: block; width: 60px; height: 1px; margin: 20px 0 0 auto; background: var(--kraft-light); }
+  .aside-en { display: block; margin-top: 16px !important; font-family: var(--font-display); font-size: 10px !important; letter-spacing: 0.2em; color: rgba(255, 255, 255, 0.4) !important; }
+
+  .group-head { display: grid; grid-template-columns: 1fr 0.8fr; gap: 50px; align-items: end; padding-bottom: 30px; margin-bottom: 44px; border-bottom: 1px solid var(--line); }
+  .group-head-title h2 { margin-top: 14px; font-size: clamp(1.9rem, 3.3vw, 2.8rem); letter-spacing: -0.03em; }
+  .group-en { display: block; margin-top: 8px; font-family: var(--font-display); font-size: 11px; letter-spacing: 0.2em; color: var(--clay); }
+  .group-head-side { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+  .group-head-side p { font-size: 14px; line-height: 1.8; color: var(--muted); max-width: 40ch; }
+  .group-head-side span { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.12em; color: var(--forest); white-space: nowrap; }
+  .group--alt { background: var(--paper-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+  .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .empty-note { color: var(--muted); }
+
+  .catalogue-cta { background: var(--ink); color: var(--white); }
+  .catalogue-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+  .catalogue-cta .eyebrow { color: var(--kraft-light); }
+  .catalogue-cta .section-title .accent { color: var(--kraft-light); }
+  .catalogue-side .lead { color: rgba(255, 255, 255, 0.68); }
+  .catalogue-side .btn { margin-top: 30px; }
+
+  @media (max-width: 1000px) {
+    .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .group-head { grid-template-columns: 1fr; gap: 22px; }
+  }
+  @media (max-width: 720px) {
+    .page-hero { padding-top: calc(var(--header-h) + 50px); padding-bottom: 60px; }
+    .page-hero-inner, .catalogue-inner { grid-template-columns: 1fr; gap: 34px; }
+    .page-hero-aside { justify-self: start; text-align: left; }
+    .aside-line { margin-left: 0; margin-right: auto; }
+    .aside-no { font-size: 54px; }
+    .product-grid { grid-template-columns: 1fr; }
+    .group-head-side { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+</style>

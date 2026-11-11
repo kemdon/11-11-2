@@ -1,0 +1,23 @@
+# Single source of truth for the shared preview router.
+#
+# Deploy this file ONLY from the base repository. Project clones carry a stale
+# copy of preview-router/, and deploying one of those silently rolls the rules
+# below back for every hostname on the zone.
+
+name = "preview-router"
+main = "worker.js"
+compatibility_date = "2026-04-20"
+
+routes = [
+  { pattern = "*.zhidaola.top/*", zone_name = "zhidaola.top" }
+]
+
+[vars]
+# Explicit allowlist for the operator's OWN hostnames pinned to this staging
+# zone. Left empty on purpose: every hostname must then be a 14-digit preview
+# slug, and anything else gets a 400 instead of silently resolving to a
+# stranger's Pages project.
+#
+# Never list a client site here. Production sites belong on their own domain
+# through a Cloudflare Pages Custom Domain, which does not involve this Worker.
+PRODUCTION_ROUTES = '{}'

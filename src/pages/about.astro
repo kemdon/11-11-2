@@ -1,0 +1,189 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getLocaleConfig, getSiteSettings } from '../lib/site-content';
+
+const { defaultLocale } = await getLocaleConfig();
+const site = await getSiteSettings(defaultLocale);
+
+const figures = [
+  { value: '3', label: '座原膜 / 制袋 / 纸类工厂' },
+  { value: '30,000㎡', label: '工厂面积' },
+  { value: '150 台', label: '自动化生产设备' },
+  { value: '30 吨', label: '日产量' },
+  { value: '200 名', label: '员工' },
+  { value: '20+', label: '产品远销国家' },
+];
+
+const credentials = [
+  { no: '01', title: 'ISO9001 质量体系认证', body: '完整且科学的质量管理体系，覆盖研发、制造与交付环节。' },
+  { no: '02', title: '欧美 SGS / CE / ROHS', body: '通过欧美 SGS 认证、CE 认证与 ROHS 检测。' },
+  { no: '03', title: '专利与软件著作权', body: '17 项实用新型专利、1 项行业核心发明专利及多项软件著作权。' },
+];
+
+const bases = [
+  { no: '01', title: '吹膜厂区', body: '空气缓冲包装原膜生产。' },
+  { no: '02', title: '制袋厂区', body: '气柱袋、葫芦膜等制袋加工。' },
+  { no: '03', title: '纸类厂区', body: '蜂窝纸及纸类缓冲制品生产。' },
+];
+---
+
+<Layout
+  title="关于我们 | 笑纳包装 ShinerPack"
+  description="广东笑纳包装有限公司专注生态环境保护新材料、空气缓冲包装及包装机械的研发制造，拥有三大厂区、30,000㎡ 工厂面积与 150 台自动化设备。"
+  lang={defaultLocale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  ogImage={site.defaultOgImage}
+>
+  <Navbar site={site} locale={defaultLocale} currentPath="/about" />
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="面包屑"><a href="/">首页</a><span>/</span><span>关于我们</span></nav>
+        <span class="eyebrow">COMPANY PROFILE</span>
+        <h1>把一件包装的事，<br />做成一整套<span>能力</span></h1>
+        <p class="lead">笑纳包装是一家专注于生态环境保护新材料、空气缓冲包装及包装机械研发、制造和销售的高新技术企业。</p>
+      </div>
+    </section>
+
+    <section class="section profile">
+      <div class="container profile-grid">
+        <div class="profile-media">
+          <div class="image-frame"><img src="/images/factory.webp" alt="纸包装生产车间里的大型牛皮纸卷、加工设备与堆叠的瓦楞纸板" width="2000" height="1125" loading="eager" /></div>
+          <p class="photo-caption"><span>FIG. 01</span> 纸类包装材料生产现场</p>
+        </div>
+        <div class="profile-copy">
+          <span class="eyebrow">WHO WE ARE</span>
+          <h2 class="section-title">从材料到设备，<br />都在<span class="accent">同一条链路上</span></h2>
+          <p class="lead">我们提供吹膜、印刷和制袋的一站式服务，产品涵盖气柱包装、葫芦膜、缓冲气垫机、蜂窝纸及相关设备，拥有完整且科学的质量管理体系。</p>
+          <p class="lead">公司在东莞、惠州、深圳等地设有多个研发和制造基地，占地总面积达 30,000㎡，拥有三大厂区，现有员工 200 余人，配备 150 台先进制造设备。产品远销北美、欧盟、日韩及东南亚等 20 多个国家。</p>
+          <p class="lead">我们秉承「挑战、创新、超越」的精神，致力于成为全球顶尖的新型缓冲包装方案企业；核心价值观是追求卓越品质、人本精神与共创价值。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight figures-band">
+      <div class="container">
+        <div class="figures-grid">
+          {figures.map((item) => (
+            <div><strong>{item.value}</strong><span>{item.label}</span></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section credentials">
+      <div class="container">
+        <div class="section-head-grid">
+          <div>
+            <span class="eyebrow">QUALIFICATIONS</span>
+            <h2 class="section-title">来自专业领域的<br /><span class="accent">认证与积累</span></h2>
+          </div>
+          <p class="lead">笑纳包装已通过 ISO9001 质量体系认证、欧美 SGS 认证、CE 认证和 ROHS 检测，并拥有多项专利与软件著作权。</p>
+        </div>
+        <div class="cred-grid">
+          {credentials.map((item) => (
+            <div class="cred-item">
+              <span class="number-tag">{item.no}</span>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark bases">
+      <div class="container bases-grid">
+        <div>
+          <span class="eyebrow">THREE FACTORIES</span>
+          <h2 class="section-title">三座厂区，<br /><span class="accent">协同交付</span></h2>
+          <p class="lead">原膜、制袋与纸类制品分区生产，配合吹膜、印刷、制袋的一站式服务，支撑从标准品到定制规格的灵活交付。</p>
+          <a class="btn btn--outline" href="/products">查看产品体系 <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+        <div class="base-list">
+          {bases.map((item) => (
+            <div class="base-item"><span>{item.no}</span><div><h3>{item.title}</h3><p>{item.body}</p></div></div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight invite">
+      <div class="container invite-grid">
+        <div>
+          <span class="eyebrow">VISIT & TALK</span>
+          <h2 class="section-title">欢迎莅临公司<br />参观、指导与洽谈</h2>
+        </div>
+        <div>
+          <p class="lead">办公地址：广东省东莞市大岭山镇马蹄岗华表街 1 号龙圣工业园 F 栋<br />生产基地：同园区 F、E、A 栋<br />电话：0769-83350356 · 邮箱：shiner@shinerpack.com</p>
+          <a class="btn btn--solid" href="/contact">联系我们 <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer site={site} locale={defaultLocale} />
+</Layout>
+
+<style>
+  .page-hero { background: var(--ink); color: var(--white); padding-top: calc(var(--header-h) + 76px); padding-bottom: 92px; }
+  .crumbs { display: flex; gap: 12px; margin-bottom: 40px; font-size: 12px; color: rgba(255, 255, 255, 0.45); }
+  .crumbs a:hover { color: var(--white); }
+  .page-hero .eyebrow { color: var(--kraft-light); }
+  .page-hero h1 { margin-top: 24px; font-size: clamp(2.7rem, 6vw, 5rem); line-height: 1.14; letter-spacing: -0.045em; }
+  .page-hero h1 span { color: var(--kraft-light); }
+  .page-hero .lead { margin-top: 26px; max-width: 58ch; color: rgba(255, 255, 255, 0.7); }
+
+  .profile-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(50px, 7vw, 110px); align-items: center; }
+  .profile-media .image-frame { aspect-ratio: 4 / 3; }
+  .photo-caption { display: flex; gap: 16px; margin-top: 16px; font-size: 12px; color: var(--muted); }
+  .photo-caption span { font-family: var(--font-display); letter-spacing: 0.14em; color: var(--clay); }
+  .profile-copy .lead { margin-top: 22px; }
+  .profile-copy .lead:first-of-type { margin-top: 28px; }
+
+  .figures-band { background: var(--paper-deep); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .figures-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .figures-grid > div { display: grid; gap: 8px; padding: 30px 20px; background: var(--paper-deep); }
+  .figures-grid strong { font-family: var(--font-display); font-size: clamp(1.5rem, 2.4vw, 2.3rem); font-weight: 600; color: var(--forest); line-height: 1.1; }
+  .figures-grid span { font-size: 12px; color: var(--muted); }
+
+  .section-head-grid { display: grid; grid-template-columns: 1fr 0.85fr; gap: 70px; align-items: end; margin-bottom: 52px; }
+  .cred-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .cred-item { padding: 34px 30px 34px 0; border-right: 1px solid var(--line); }
+  .cred-item:not(:first-child) { padding-left: 30px; }
+  .cred-item:last-child { border-right: 0; }
+  .cred-item h3 { margin-top: 20px; font-size: 19px; }
+  .cred-item p { margin-top: 12px; font-size: 13px; line-height: 1.85; color: var(--muted); }
+
+  .bases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .bases .lead { margin-top: 24px; }
+  .bases .btn { margin-top: 34px; }
+  .base-list { border-top: 1px solid var(--line-light); }
+  .base-item { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 24px 0; border-bottom: 1px solid var(--line-light); }
+  .base-item > span { font-family: var(--font-display); font-size: 12px; color: var(--kraft-light); }
+  .base-item h3 { font-size: 18px; color: var(--white); }
+  .base-item p { margin-top: 6px; font-size: 13px; color: rgba(246, 242, 233, 0.6); }
+
+  .invite { background: var(--paper-deep); border-top: 1px solid var(--line); }
+  .invite-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+  .invite .lead { font-size: 14px; line-height: 2; }
+  .invite .btn { margin-top: 30px; }
+
+  @media (max-width: 1000px) {
+    .figures-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .profile-grid, .section-head-grid, .bases-grid, .invite-grid { grid-template-columns: 1fr; gap: 44px; }
+    .cred-grid { grid-template-columns: 1fr; }
+    .cred-item, .cred-item:not(:first-child) { padding: 26px 0; border-right: 0; border-bottom: 1px solid var(--line); }
+    .cred-item:last-child { border-bottom: 0; }
+  }
+  @media (max-width: 620px) {
+    .figures-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

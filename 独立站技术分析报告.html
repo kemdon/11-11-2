@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三个独立站技术分析报告 · 2026-11-11</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#30363d;
+  --tx:#e6edf3; --tx2:#a9b4c0; --tx3:#7d8996;
+  --blue:#58a6ff; --cyan:#39c5cf; --green:#3fb950; --amber:#d29922;
+  --red:#f85149; --purple:#bc8cff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px 100px}
+a{color:var(--blue);text-decoration:none}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88em;
+  background:#222a35;color:#a5d6ff;padding:2px 6px;border-radius:5px;word-break:break-all}
+h2{font-size:25px;margin:0 0 6px;letter-spacing:.4px}
+h3{font-size:18px;margin:30px 0 12px;color:var(--tx)}
+p{margin:12px 0}
+/* hero */
+.hero{padding:64px 0 40px;border-bottom:1px solid var(--line);margin-bottom:38px}
+.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:3px;font-weight:700;margin-bottom:14px}
+.hero h1{font-size:40px;line-height:1.3;margin:0 0 16px;letter-spacing:.5px}
+.hero .sub{color:var(--tx2);font-size:15px;max-width:760px}
+.chips{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;
+  padding:6px 14px;font-size:12.5px;color:var(--tx2)}
+.chip b{color:var(--blue);font-weight:600}
+.meta{margin-top:20px;color:var(--tx3);font-size:12.5px}
+/* nav */
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.nav a{border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:12.5px;color:var(--tx2)}
+.nav a:hover{border-color:var(--blue);color:var(--blue)}
+/* section */
+section{margin:0 0 62px;scroll-margin-top:20px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:26px}
+.sec-num{color:var(--blue);font-size:13px;font-weight:700;letter-spacing:2px}
+.lead{color:var(--tx2);font-size:15px}
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin:18px 0}
+.card.blue{border-left:4px solid var(--blue)}
+.card.amber{border-left:4px solid var(--amber)}
+.card.red{border-left:4px solid var(--red)}
+.card.green{border-left:4px solid var(--green)}
+.big-quote{font-size:20px;line-height:1.7;font-weight:600;color:#fff;margin:0 0 12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 16px}
+.kpi .n{font-size:30px;font-weight:750;color:var(--blue);line-height:1.2}
+.kpi .n.warn{color:var(--amber)} .kpi .n.ok{color:var(--green)} .kpi .n.pp{color:var(--purple)}
+.kpi .t{font-size:12.5px;color:var(--tx2);margin-top:6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mini{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.mini .h{font-weight:700;color:#fff;margin-bottom:8px;font-size:15px}
+.mini .b{font-size:13.5px;color:var(--tx2)}
+.mini .site{font-size:11.5px;color:var(--cyan);letter-spacing:1px;margin-bottom:10px;font-weight:700}
+/* tags */
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 8px;vertical-align:middle;margin-right:6px}
+.tag.tech{background:#12283f;color:var(--blue);border:1px solid #1f4a75}
+.tag.plain{background:#1d2b1f;color:var(--green);border:1px solid #2c5231}
+.tag.hi{background:#3a1a1c;color:#ff8a80;border:1px solid #6b2626}
+.tag.md{background:#332a13;color:#e8c05c;border:1px solid #5c4a1e}
+.tag.lo{background:#1d2433;color:#a5b4d4;border:1px solid #33405c}
+.plainline{background:#141c19;border-left:3px solid var(--green);padding:10px 14px;border-radius:0 8px 8px 0;
+  color:#b8d8c0;font-size:13.5px;margin:10px 0}
+/* table */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:18px 0}
+table{border-collapse:collapse;width:100%;min-width:660px;font-size:13.5px}
+th{background:var(--panel2);color:var(--tx);text-align:left;padding:12px 14px;font-weight:650;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid #242b34;color:var(--tx2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#1a2029}
+td strong{color:var(--tx)}
+.good{color:var(--green);font-weight:600} .bad{color:#ff8a80;font-weight:600} .warn{color:#e8c05c;font-weight:600}
+/* diagram */
+.diagram{background:linear-gradient(160deg,#111a26,#0f141c);border:1px solid var(--line);border-radius:14px;padding:18px;margin:20px 0}
+.diagram svg{width:100%;height:auto;display:block}
+.dnote{font-size:12.5px;color:var(--tx3);margin-top:6px}
+/* arch text */
+pre{background:#0b1017;border:1px solid var(--line);border-radius:12px;padding:18px 20px;overflow-x:auto;
+  color:#c9d6e3;font-size:12.5px;line-height:1.8;font-family:ui-monospace,Consolas,monospace;margin:18px 0}
+/* bars */
+.bars{margin:18px 0}
+.barrow{display:grid;grid-template-columns:150px 1fr 92px;gap:12px;align-items:center;margin:11px 0;font-size:13px}
+.bartrack{background:#222a35;border-radius:6px;height:14px;overflow:hidden}
+.barfill{height:100%;border-radius:6px;background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+.barfill.b2{background:linear-gradient(90deg,#b0740f,#d29922)}
+.barfill.b3{background:linear-gradient(90deg,#8957e5,#bc8cff)}
+.barval{color:var(--tx2);text-align:right;font-size:12.5px}
+/* risk */
+.risk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0}
+.risk .rt{font-weight:700;color:#fff;font-size:15.5px;margin-bottom:8px}
+.risk .rb{font-size:13.5px;color:var(--tx2)}
+.risk .fix{margin-top:10px;font-size:13px;color:#a5d6ff;background:#12202f;border-radius:8px;padding:9px 12px}
+.risk.h{border-left:4px solid var(--red)} .risk.m{border-left:4px solid var(--amber)} .risk.l{border-left:4px solid var(--blue)}
+/* steps */
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:18px 0}
+ol.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:13px 16px 13px 54px;margin:10px 0;position:relative;font-size:14px;color:var(--tx2)}
+ol.steps li::before{content:counter(s);position:absolute;left:16px;top:13px;width:24px;height:24px;
+  background:#1f6feb;color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+ol.steps li b{color:var(--tx)}
+ul.clean{padding-left:20px;color:var(--tx2);font-size:13.5px}
+ul.clean li{margin:6px 0}
+.foot{border-top:1px solid var(--line);padding-top:22px;color:var(--tx3);font-size:12.5px}
+@media(max-width:800px){
+  .kpis,.grid2,.grid3{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:30px}.barrow{grid-template-columns:110px 1fr 84px}
+  .wrap{padding:0 16px 70px}
+}
+@media print{body{background:#fff;color:#111}.card,.mini,.kpi,.risk{background:#fff;border-color:#ccc;color:#111}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="hero">
+  <div class="eyebrow">TECHNICAL AUDIT · 竞品站点技术分析</div>
+  <h1>三个独立站，其实是<br>「一套系统 + 三个门面」</h1>
+  <div class="sub">对英文主站、纯纸站、中文站做的一次公开、被动的技术体检：DNS、服务器、CDN、SSL、建站程序、缓存、性能、SEO 与安全配置。全部结论均来自实测响应头、证书、注册信息与首页源码。</div>
+  <div class="chips">
+    <span class="chip"><b>英文主站</b> www.packb2b.com</span>
+    <span class="chip"><b>纯纸站</b> www.papercushion.com</span>
+    <span class="chip"><b>中文站</b> www.shinerpack.com</span>
+  </div>
+  <div class="meta">检测时间：2026-11-11 14:18–14:40（GMT+8） · 方法：被动探测，未登录后台、未做漏洞扫描或压测</div>
+</div>
+
+<div class="nav">
+  <a href="#s1">① 一句话结论</a><a href="#s2">② 访问链路</a><a href="#s3">③ 服务器与部署</a>
+  <a href="#s4">④ 三站画像</a><a href="#s5">⑤ 克隆证据</a><a href="#s6">⑥ 性能实测</a>
+  <a href="#s7">⑦ 问题清单</a><a href="#s8">⑧ 改造顺序</a><a href="#s9">⑨ 名词小抄</a><a href="#s10">⑩ 方法与边界</a>
+</div>
+
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">01</span><h2>一句话结论</h2></div>
+  <div class="card blue">
+    <div class="big-quote">三个网站 = 同一个 Cloudflare 账号 + 同一类 LiteSpeed 源站 + 同一套 WordPress / WooCommerce / Blocksy 模板。其中「纯纸站」和「中文站」几乎是一模一样的双胞胎。</div>
+    <p style="color:var(--tx2);margin-bottom:0">更直白点：这是典型的<b style="color:#fff">外贸建站公司交付的 WordPress 模板站</b>——便宜、好改、上线快；但性能调优、SEO 基础设置、安全加固基本还停留在"能打开就行"的阶段。技术上跑得起来，商业上还有不少漏水的口子。</p>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="n">3 → 1</div><div class="t">3 个域名，共用 1 对 Cloudflare 名称服务器（同一账号）</div></div>
+    <div class="kpi"><div class="n pp">1053</div><div class="t">纯纸站与中文站首页页面 ID 完全相同（数据库克隆）</div></div>
+    <div class="kpi"><div class="n ok">24 年</div><div class="t">主域名 packb2b.com 注册于 2002 年，SEO 老资产</div></div>
+    <div class="kpi"><div class="n warn">40 天</div><div class="t">papercushion.com 2026-12-21 到期，且未配邮箱</div></div>
+  </div>
+  <div class="grid3">
+    <div class="mini"><div class="h">✅ 做得不错</div><div class="b">Cloudflare 隐藏源站 IP；TLS 1.3 + HTTP/2/3；Let's Encrypt 证书自动续期；Brotli 压缩；源站有 LiteSpeed 页面缓存；图片懒加载。</div></div>
+    <div class="mini"><div class="h">⚠️ 明显短板</div><div class="b">未强制 HTTPS、无安全响应头；网页不进 CDN 缓存；首页 HTML 半兆以上；网址是 <code>?page_id=</code> 格式；没有站点地图；三站无 hreflang 互认。</div></div>
+    <div class="mini"><div class="h">🔧 值得立刻做</div><div class="b">开 Always Use HTTPS + HSTS；修中文站 79 处 http 图片；续费域名并配邮箱；升级旧版 WordPress；改固定链接并生成 sitemap。</div></div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">02</span><h2>一次访问是怎么走的</h2></div>
+  <p class="lead">用「开店」打比方：访客看到的是招牌，接待他的是连锁前台，真正做菜的后厨藏在后面，外人查不到地址。</p>
+  <div class="diagram">
+    <svg viewBox="0 0 1000 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="网站访问链路架构图">
+      <defs>
+        <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 z" fill="#58a6ff"/>
+        </marker>
+      </defs>
+      <rect x="0" y="0" width="1000" height="330" fill="#0f141c" rx="10"/>
+      <!-- visitor -->
+      <rect x="24" y="86" width="176" height="120" rx="12" fill="#1b2636" stroke="#3a4a61" stroke-width="1.5"/>
+      <text x="112" y="118" fill="#e6edf3" font-size="17" font-weight="700" text-anchor="middle">访客浏览器</text>
+      <text x="112" y="146" fill="#8b98a8" font-size="12" text-anchor="middle">欧美 / 全球买家</text>
+      <text x="112" y="168" fill="#58a6ff" font-size="12" text-anchor="middle">https://www.xxx.com</text>
+      <line x1="204" y1="146" x2="252" y2="146" stroke="#58a6ff" stroke-width="2" marker-end="url(#ar)"/>
+      <!-- cloudflare -->
+      <rect x="258" y="60" width="220" height="172" rx="12" fill="#132a3d" stroke="#2f6fa8" stroke-width="1.5"/>
+      <text x="368" y="92" fill="#79c0ff" font-size="17" font-weight="700" text-anchor="middle">Cloudflare 边缘</text>
+      <text x="368" y="118" fill="#a9c8e4" font-size="12" text-anchor="middle">全球连锁「前台 + 保安」</text>
+      <text x="368" y="142" fill="#8fb8dc" font-size="11.5" text-anchor="middle">104.21.x.x / 172.67.x.x</text>
+      <text x="368" y="162" fill="#8fb8dc" font-size="11.5" text-anchor="middle">SSL 证书 · Brotli · HTTP/2/3</text>
+      <text x="368" y="182" fill="#8fb8dc" font-size="11.5" text-anchor="middle">WAF · 隐藏源站 IP</text>
+      <text x="368" y="210" fill="#e8c05c" font-size="11" text-anchor="middle">⚠ 网页 cf-cache-status: DYNAMIC</text>
+      <line x1="482" y1="146" x2="530" y2="146" stroke="#58a6ff" stroke-width="2" marker-end="url(#ar)"/>
+      <text x="506" y="132" fill="#e8c05c" font-size="11" text-anchor="middle">每次回源</text>
+      <!-- origin -->
+      <rect x="536" y="60" width="220" height="172" rx="12" fill="#231d33" stroke="#6c4fa3" stroke-width="1.5"/>
+      <text x="646" y="92" fill="#d2b3ff" font-size="17" font-weight="700" text-anchor="middle">LiteSpeed 源站</text>
+      <text x="646" y="118" fill="#c4b1e0" font-size="12" text-anchor="middle">真正的「后厨」· IP 不可见</text>
+      <text x="646" y="142" fill="#b9a6d4" font-size="11.5" text-anchor="middle">LiteSpeed Web Server</text>
+      <text x="646" y="162" fill="#b9a6d4" font-size="11.5" text-anchor="middle">LSCache 7.9 / 7.8.1 页面缓存</text>
+      <text x="646" y="182" fill="#b9a6d4" font-size="11.5" text-anchor="middle">PHP · QUIC.cloud CSS 优化</text>
+      <text x="646" y="210" fill="#3fb950" font-size="11" text-anchor="middle">✓ x-litespeed-cache: hit</text>
+      <line x1="760" y1="146" x2="808" y2="146" stroke="#bc8cff" stroke-width="2" marker-end="url(#ar)"/>
+      <!-- WP -->
+      <rect x="814" y="60" width="162" height="172" rx="12" fill="#1b2a25" stroke="#39775a" stroke-width="1.5"/>
+      <text x="895" y="92" fill="#7ee2a8" font-size="16" font-weight="700" text-anchor="middle">WordPress</text>
+      <text x="895" y="118" fill="#a9d6bd" font-size="11.5" text-anchor="middle">WooCommerce</text>
+      <text x="895" y="138" fill="#a9d6bd" font-size="11.5" text-anchor="middle">Blocksy 主题</text>
+      <text x="895" y="158" fill="#a9d6bd" font-size="11.5" text-anchor="middle">AIOSEO / CF7</text>
+      <text x="895" y="178" fill="#a9d6bd" font-size="11.5" text-anchor="middle">MySQL 数据库</text>
+      <text x="895" y="208" fill="#8b98a8" font-size="11" text-anchor="middle">现拼出 500–680 KB HTML</text>
+      <!-- bottom bar -->
+      <rect x="24" y="262" width="952" height="46" rx="9" fill="#161b22" stroke="#30363d"/>
+      <text x="500" y="291" fill="#a9b4c0" font-size="12.5" text-anchor="middle">返回：Brotli 压缩到 60–96 KB → 浏览器渲染 100+ 张图片（懒加载）</text>
+    </svg>
+    <div class="dnote">图示依据实测响应头绘制：<code>Server: cloudflare</code>、<code>cf-cache-status: DYNAMIC</code>、<code>x-litespeed-cache: hit</code>、404 页 "Proudly powered by LiteSpeed Web Server"。</div>
+  </div>
+  <div class="plainline"><span class="tag plain">说人话</span> 好处是真实服务器被藏起来（抗攻击）、全球就近接入；代价是前台没配好页面缓存，每位访客都要让后厨现做一份，速度自然慢。</div>
+</section>
+
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">03</span><h2>服务器与部署：到底查到了什么</h2></div>
+  <div class="tw"><table>
+    <tr><th style="width:150px">项目</th><th>实测结果</th><th style="width:280px">说人话</th></tr>
+    <tr><td><strong>权威 DNS</strong></td><td>三域名 NS 都是 <code>bella.ns.cloudflare.com</code> + <code>sri.ns.cloudflare.com</code></td><td>三个域名在同一个 Cloudflare 账号里，同一批人配置</td></tr>
+    <tr><td><strong>对外 IP</strong></td><td>packb2b 104.21.10.45 / 172.67.189.237；papercushion 104.21.55.250 / 172.67.174.210；shinerpack 104.21.38.211 / 172.67.168.124</td><td>全是 Cloudflare 共享 IP（ipinfo 确认 AS13335 Cloudflare），<b>不是</b>真实服务器 IP</td></tr>
+    <tr><td><strong>源站 IP</strong></td><td class="bad">公开渠道查不到，所有子域也都指向 Cloudflare</td><td>被 CDN 藏得很好，这是正确做法；但也意味着机房位置、云厂商无法确证</td></tr>
+    <tr><td><strong>源站 Web 服务器</strong></td><td class="good">LiteSpeed Web Server（404 页签名 + <code>x-litespeed-cache</code> + ETag 尾部 <code>;;;</code> 特征）</td><td>不是常见的 Nginx/Apache，是外贸主机常见的 LiteSpeed 方案</td></tr>
+    <tr><td><strong>缓存加速</strong></td><td>LiteSpeed Cache 7.9（英文站/纯纸站）、7.8.1（中文站）；QUIC.cloud CCSS/UCSS 关键 CSS 优化；Guest Mode</td><td>源站做了页面缓存和 CSS 精简；Cloudflare 只当门面，未启用 WordPress 专用加速 APO</td></tr>
+    <tr><td><strong>CDN 缓存</strong></td><td class="warn">HTML <code>cf-cache-status: DYNAMIC</code>；静态图设了 7 天缓存，实测仍 <code>MISS</code></td><td>网页本身没缓存在边缘，每个访客都要回源；图片缓存也没稳定命中</td></tr>
+    <tr><td><strong>协议 / 压缩</strong></td><td class="good">Brotli；TLS 1.3 + TLS_AES_256_GCM_SHA384；ALPN 协商 h2；<code>alt-svc: h3</code> 支持 HTTP/3；X25519MLKEM768 混合密钥交换</td><td>传输层是新版、合规的，这块做得不错</td></tr>
+    <tr><td><strong>SSL 证书</strong></td><td>Let's Encrypt（YE1/YE2），ECDSA 256 位，覆盖 <code>*.域名</code> + 根域；2026-10-21 签发、2027-01-19 到期</td><td>Cloudflare 免费通用证书，90 天自动续，不用人工操心；三张证同日签发</td></tr>
+    <tr><td><strong>泛域名解析</strong></td><td>随机子域如 <code>zzq-random-88123.packb2b.com</code> 也解析到同样 CF IP（对照的不存在域名正常 NXDOMAIN）</td><td>DNS 配了 <code>*</code> 通配符，任何子域都被接住，方便但易被垃圾子域滥用</td></tr>
+    <tr><td><strong>域名注册</strong></td><td>均在阿里云 / HiChina 注册：<b>packb2b.com 2002-09-24</b>（2027-09-24 到期）、shinerpack.com 2014-12-20（2027-12-20 到期）、<b class="warn">papercushion.com 2022-12-21（2026-12-21 到期）</b>；三者 2026-04-27 同日变更</td><td>主站是 24 年老域名，SEO 底子好；纯纸站下月到期要盯紧；同日变更坐实统一运维</td></tr>
+    <tr><td><strong>企业邮箱</strong></td><td>packb2b → 腾讯企业邮（SPF ~all）；shinerpack → 阿里企业邮（SPF -all）；<b class="bad">papercushion → 无 MX、无 SPF</b></td><td>三个站邮箱各管各的；纯纸站没配邮箱，询盘表单很可能发不出信</td></tr>
+    <tr><td><strong>边缘节点</strong></td><td>CF-RAY 落在 LAX / SEA</td><td>这是本次检测流量的出境节点，<b>不代表</b>服务器在美国</td></tr>
+  </table></div>
+  <div class="card amber">
+    <div class="rt" style="font-weight:700;margin-bottom:6px">关于「服务器到底在哪」——诚实的回答</div>
+    <p style="margin:0;color:var(--tx2);font-size:14px">能确证的只有：源站是 LiteSpeed + PHP + MySQL 这套组合、域名在阿里云、邮箱分腾讯/阿里两套。Cloudflare 把源站 IP 藏得很好，所有子域都走 CDN，<b style="color:#fff">无法从外部确定机房国家和云服务商</b>。从跨境响应时间与这套组合的常见用法推测，大概率是境外（美西 / 亚太）的 VPS 或外贸虚拟主机——但这是推测，没有实证，不建议当成结论写进采购或迁移方案。</p>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">04</span><h2>三个站各自长什么样</h2></div>
+  <div class="tw"><table>
+    <tr><th style="width:155px">维度</th><th>packb2b.com<br><span style="font-weight:400;color:var(--tx3)">英文主站</span></th><th>papercushion.com<br><span style="font-weight:400;color:var(--tx3)">纯纸站</span></th><th>shinerpack.com<br><span style="font-weight:400;color:var(--tx3)">中文站</span></th></tr>
+    <tr><td><strong>页面语言标记</strong></td><td class="good">en-US ✅ 与定位一致</td><td class="warn">zh-Hans ⚠️ 却写英文描述</td><td class="good">zh-Hans ✅</td></tr>
+    <tr><td><strong>首页标题</strong></td><td>Home - ShinerPack</td><td>Home - Paper Cushion</td><td>Home - ShinerPack</td></tr>
+    <tr><td><strong>meta 描述</strong></td><td>英文</td><td class="warn">英文，与中文 lang 冲突</td><td>中文</td></tr>
+    <tr><td><strong>WordPress</strong></td><td class="bad">6.4.2（偏旧）</td><td>7.1.4</td><td>7.1.4</td></tr>
+    <tr><td><strong>WooCommerce</strong></td><td>8.4.3</td><td>8.8.7</td><td>8.8.7</td></tr>
+    <tr><td><strong>AIOSEO</strong></td><td>5.0.5</td><td>4.6.1.1</td><td>4.6.1.1</td></tr>
+    <tr><td><strong>LiteSpeed Cache</strong></td><td>7.9（CCSS/UCSS 已生成）</td><td>7.9（UCSS 排队中）</td><td class="warn">7.8.1（UCSS 排队中）</td></tr>
+    <tr><td><strong>首页 HTML</strong></td><td>680 KB / 114 张图</td><td>509 KB / 100 张图</td><td>507 KB / 100 张图</td></tr>
+    <tr><td><strong>Brotli 后</strong></td><td>≈96 KB</td><td>≈63 KB</td><td>≈63 KB</td></tr>
+    <tr><td><strong>首页页面 ID</strong></td><td>22125</td><td class="warn"><b>1053</b></td><td class="warn"><b>1053</b></td></tr>
+    <tr><td><strong>联系表单 ID</strong></td><td>—</td><td><code>wpcf7-f3018-p1053</code></td><td><code>wpcf7-f3018-p1053</code></td></tr>
+    <tr><td><strong>统计代码</strong></td><td>GTM-WCKNWTXH + GA</td><td>旧版 GA 引用</td><td>旧版 GA 引用</td></tr>
+    <tr><td><strong>历史残留</strong></td><td>1 处 <code>localhost</code> 图片引用</td><td>演示站 <code>startersites.io</code> 素材</td><td class="bad">79 处 <code>http://</code> 明文图片 + 演示站素材</td></tr>
+    <tr><td><strong>缓存时间戳时区</strong></td><td>UTC</td><td>UTC+8</td><td>UTC+8</td></tr>
+  </table></div>
+  <h3>共同技术栈</h3>
+  <div class="card">
+    <p style="margin-top:0"><span class="tag tech">技术事实</span> WordPress + WooCommerce + Blocksy 主题（Blocksy Companion Pro）+ LiteSpeed Cache + AIOSEO + Contact Form 7 + Gutenberg + jQuery + Google Fonts + Google Analytics。图片全部自托管在 <code>wp-content/uploads</code>，使用懒加载（<code>data-litespeed-src</code>），部分文件名是中文。</p>
+    <div class="plainline"><span class="tag plain">说人话</span> 一整套「开源建站全家桶」：WordPress 是地基，WooCommerce 管产品，Blocksy 管长相，AIOSEO 管 SEO，CF7 管询盘表单，LiteSpeed 管加速。优点是便宜、插件多、会用的人多；缺点是插件一多页面就臃肿，版本不一致就容易出问题。</div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">05</span><h2>「双胞胎」的证据链</h2></div>
+  <p class="lead">纯纸站与中文站不是"风格相似"，是<b style="color:#fff">数据库层面的整套复制</b>：</p>
+  <div class="grid2">
+    <div class="mini"><div class="site">EVIDENCE 01</div><div class="h">页面 / 表单 ID 完全一致</div><div class="b">首页页面 ID 同为 <b style="color:#fff">1053</b>，联系表单同为 <code>wpcf7-f3018-p1053</code>，导航里的 <code>?page_id=1048 / 3484 / 2139</code> 与分类 slug 逐条对得上。克隆数据库才会这样。</div></div>
+    <div class="mini"><div class="site">EVIDENCE 02</div><div class="h">版本与配置完全一致</div><div class="b">WordPress 7.1.4、WooCommerce 8.8.7、AIOSEO 4.6.1.1、插件清单、robots.txt 字节数（<b style="color:#fff">2676</b>，三站全同）、Cloudflare 托管 robots 规则，一模一样。</div></div>
+    <div class="mini"><div class="site">EVIDENCE 03</div><div class="h">页面结构几乎逐字节对齐</div><div class="b">首页 HTML 只差 2.6 KB，图片数量同为 100 张，内联 style/script 数量、产品分类链接、模板资源路径结构一致。</div></div>
+    <div class="mini"><div class="site">EVIDENCE 04</div><div class="h">运维动作同一天发生</div><div class="b">三域名的 NS 完全是同一对；三张 SSL 证书同在 2026-10-21 签发；三个域名同在 2026-04-27 变更注册信息。</div></div>
+  </div>
+  <div class="card blue" style="margin-top:18px">
+    <p style="margin:0"><b style="color:#fff">反过来，英文主站是另一套更早、内容更多的数据库</b>：页面 ID 到 22125、WordPress 版本更旧（6.4.2）、缓存时间戳用 UTC。合理推测是<b style="color:#fff">先做英文主站，后来另起一套模板复制出纯纸站和中文站</b>，三站并未做统一的多语言 / 多站点治理。</p>
+  </div>
+  <div class="plainline"><span class="tag plain">说人话</span> 三块招牌、一个老板，但后厨有两套菜单，而且其中两套是复印的。复印本身没问题，问题在于搜索引擎会问："这三家店卖一样的东西，我该把谁排前面？"——没有 <code>hreflang</code> 和跨站 canonical，就没人回答这个问题。</div>
+</section>
+
+<section id="s6">
+  <div class="sec-head"><span class="sec-num">06</span><h2>性能实测</h2></div>
+  <p class="lead">同一时刻、同一网络环境下各请求 3 次首页，取首字节时间（TTFB）。单位：秒，越短越好。</p>
+  <div class="bars">
+    <div class="barrow"><div>packb2b 平均</div><div class="bartrack"><div class="barfill" style="width:48%"></div></div><div class="barval">1.42 s</div></div>
+    <div class="barrow"><div>papercushion 平均</div><div class="bartrack"><div class="barfill b2" style="width:71%"></div></div><div class="barval">2.11 s</div></div>
+    <div class="barrow"><div>shinerpack 平均</div><div class="bartrack"><div class="barfill b3" style="width:52%"></div></div><div class="barval">1.55 s</div></div>
+  </div>
+  <div class="tw"><table>
+    <tr><th>站点</th><th>TTFB（3 次）</th><th>完整下载（3 次）</th><th>原始 HTML</th><th>Brotli 后</th></tr>
+    <tr><td>packb2b</td><td>1.29 / 1.59 / 1.38 s</td><td>1.84 / 2.15 / 1.84 s</td><td>680 KB</td><td>≈96 KB</td></tr>
+    <tr><td>papercushion</td><td>1.14 / 2.42 / 2.78 s</td><td>1.69 / 3.43 / 3.99 s</td><td>509 KB</td><td>≈63 KB</td></tr>
+    <tr><td>shinerpack</td><td>1.78 / 1.44 / 1.44 s</td><td>2.07 / 1.95 / 1.49 s</td><td>507 KB</td><td>≈63 KB</td></tr>
+  </table></div>
+  <div class="card">
+    <p><span class="tag tech">技术事实</span> 1–3 秒才拿到第一个字节，对 B2B 外贸站偏慢。三个主因：① HTML <code>cf-cache-status: DYNAMIC</code>，每次回源；② 首页原始 HTML 半兆以上、100+ 图片、数百处内联 SVG；③ 本次访问经代理出境到 Cloudflare 美西节点再回源，跨境链路本身有延迟。</p>
+    <div class="plainline" style="margin-bottom:0"><span class="tag plain">说人话</span> 相当于每次客人点单，前台都要打电话让后厨现炒。数字受检测网络影响很大，<b>只能用来三站横向比较</b>，不是真实买家体验的绝对值；要严谨评估，请用 PageSpeed Insights / WebPageTest 从欧美、东南亚多节点复测。</div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="sec-head"><span class="sec-num">07</span><h2>问题清单</h2></div>
+
+  <h3><span class="tag hi">高</span> 建议尽快处理</h3>
+  <div class="risk h">
+    <div class="rt">1. 三个站都没有强制 HTTPS，且安全响应头全缺</div>
+    <div class="rb"><span class="tag tech">实测</span> <code>http://www.xxx.com/</code> 直接返回 200 网页，不跳转；无 HSTS、CSP、X-Frame-Options、X-Content-Type-Options、Referrer-Policy、Permissions-Policy。根域 → www 是 301，但同协议。<br><span class="tag plain">说人话</span> 网址栏能用不加密的 http 打开，数据有被偷看/篡改的风险；搜索引擎还可能把 http 与 https 当两个站重复收录，稀释权重。</div>
+    <div class="fix">🔧 Cloudflare → SSL/TLS → Edge Certificates：打开 <b>Always Use HTTPS</b> 与 <b>HSTS</b>（先确认站内资源全为 https）；用 Transform Rules 补安全响应头。</div>
+  </div>
+  <div class="risk h">
+    <div class="rt">2. 中文站 79 处 <code>http://</code> 明文图片（混合内容）</div>
+    <div class="rb"><span class="tag tech">实测</span> shinerpack 首页里 79 个图片地址写成 <code>http://www.shinerpack.com/wp-content/uploads/...</code>，而纯纸站相同位置是 https——典型的"复制后没改干净"。<br><span class="tag plain">说人话</span> 锁挂上了窗户还开着，浏览器可能直接拦掉这些图，首页出现空白图。</div>
+    <div class="fix">🔧 备份数据库 → 用 Better Search Replace 把 <code>http://www.shinerpack.com</code> 全量替换为 <code>https://www.shinerpack.com</code> → 清 LiteSpeed / Cloudflare 缓存。</div>
+  </div>
+  <div class="risk h">
+    <div class="rt">3. SEO 地基基本没打：朴素固定链接 + 无 sitemap + 无 hreflang</div>
+    <div class="rb"><span class="tag tech">实测</span> 所有内链长成 <code>?page_id=19769</code> / <code>?product_cat=%e8%9c%82...</code>；REST API 也走 <code>index.php?rest_route=/</code>；<code>/sitemap.xml</code>、<code>/sitemap_index.xml</code>、<code>/wp-sitemap.xml</code> 等全部 404；robots.txt 无 Sitemap 声明；三站 <code>hreflang</code> 出现次数为 0。<br><span class="tag plain">说人话</span> 网址里没有产品关键词，谷歌不容易看懂页面；没站点地图等于没给搜索引擎门店清单；三个站内容又高度相似，容易被当成复制粘贴，权重互相稀释。</div>
+    <div class="fix">🔧 WP 后台 → 设置 → 固定链接 → 改「文章名」（先验证重定向）→ AIOSEO 生成 sitemap → 提交 Google Search Console → 三站之间补 <code>hreflang</code> 与跨站 canonical。</div>
+  </div>
+  <div class="risk h">
+    <div class="rt">4. papercushion.com 约 40 天后到期，且没配邮箱</div>
+    <div class="rb"><span class="tag tech">实测</span> RDAP：2026-12-21 到期；DNS 无 MX、无 SPF、无 TXT。Contact Form 7 若走主机默认 mail() 发信，极易进垃圾箱或直接失败。<br><span class="tag plain">说人话</span> 域名一到期网站就打不开；就算没到期，客户填了询盘表单也可能收不到。</div>
+    <div class="fix">🔧 立即续费并开自动续费；补 MX + SPF/DKIM/DMARC；给 CF7 装 SMTP 插件，发一封测试询盘验证。</div>
+  </div>
+  <div class="risk h">
+    <div class="rt">5. 英文主站 WordPress 6.4.2 版本偏旧且版本号公开</div>
+    <div class="rb"><span class="tag tech">实测</span> HTML 里明写 <code>WordPress 6.4.2</code>、<code>WooCommerce 8.4.3</code>；<code>/wp-login.php</code> 返回 200 可访问（<code>/wp-config.php</code> 403、<code>/xmlrpc.php</code> GET 405，属正常）。<br><span class="tag plain">说人话</span> 老版本 + 公开版本号 + 后台入口敞开，是自动化扫描最喜欢盯的组合。</div>
+    <div class="fix">🔧 备份后升级 WP/插件并统一三站版本；用 Cloudflare WAF 给 <code>/wp-login.php</code>、<code>/wp-admin</code> 加访问来源限制或速率限制；隐藏版本号。</div>
+  </div>
+
+  <h3><span class="tag md">中</span> 排进迭代计划</h3>
+  <div class="risk m">
+    <div class="rt">6. 网页没进 CDN 缓存 / 首页太重</div><div class="rb">HTML <code>DYNAMIC</code>、静态图边缘 <code>MISS</code>；首页 500–680 KB、100+ 图片、数百处内联 SVG，压缩后仍要传 60–96 KB。<b>建议</b>：Cloudflare Cache Rules 缓存匿名访客 HTML（或上 APO for WordPress），静态资源设 1 年 immutable；首屏图片控制在 10 张内并全量 WebP/AVIF。</div>
+  </div>
+  <div class="risk m">
+    <div class="rt">7. 泛域名解析 <code>*</code> 全开</div><div class="rb">随机子域也能解析并被 Cloudflare 接住，可能被垃圾外链、钓鱼子域、重复收录利用。<b>建议</b>：只保留业务需要的子域，或配合 WAF 拦未知 Host。</div>
+  </div>
+  <div class="risk m">
+    <div class="rt">8. robots.txt 由 Cloudflare 托管，禁止主流 AI 爬虫</div><div class="rb">三站 robots.txt 完全一致（2676 字节），规则为 <code>search=yes, ai-train=no, use=reference</code>，并 Disallow GPTBot、ClaudeBot、CCBot、Google-Extended 等。<b>说人话</b>：ChatGPT / Claude / Perplexity 回答"环保缓冲包装供应商"时很可能引用不到这个站。若想做 AI 搜索曝光，需重新权衡（可放开 <code>ai-input</code>、保留 <code>ai-train=no</code>）。</div>
+  </div>
+  <div class="risk m">
+    <div class="rt">9. 运维与定位不统一</div><div class="rb">英文站与另两站 WP 版本、缓存插件版本、时区（UTC vs UTC+8）都不一致；纯纸站 <code>lang=zh-Hans</code> 却是英文描述；三站邮箱分属腾讯/阿里/无。<b>建议</b>：统一版本与时区，按目标市场重新校准 lang 与文案。</div>
+  </div>
+
+  <h3><span class="tag lo">低</span> 清理项</h3>
+  <div class="risk l">
+    <div class="rb" style="margin:0">演示站 <code>startersites.io</code> 素材残留、<code>localhost</code> 图片引用、中文文件名图片（建议改拼音/英文，避开 CDN 编码问题）；图片仍以 jpg/png 为主；后台登录入口可加二次保护。</div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="sec-head"><span class="sec-num">08</span><h2>如果要动手改，按这个顺序</h2></div>
+  <ol class="steps">
+    <li><b>续费与收单链路</b>：续费 papercushion.com，补 MX / SPF / DKIM / DMARC，CF7 配 SMTP 并实测一封询盘。</li>
+    <li><b>加密拉齐</b>：Cloudflare 开 Always Use HTTPS + HSTS + 安全头；同步修掉中文站 79 处 http 图片。</li>
+    <li><b>安全兜底</b>：备份后升级英文主站 WordPress 及插件，统一三站版本；WAF 保护后台登录。</li>
+    <li><b>SEO 地基</b>：固定链接改文章名 → 生成 sitemap → 提交 Search Console → 三站补 hreflang 与 canonical 策略。</li>
+    <li><b>缓存提速</b>：Cloudflare Cache Rules 缓存匿名 HTML（或 APO），静态资源 1 年 immutable 缓存。</li>
+    <li><b>页面瘦身</b>：拆分内联 SVG / 大段 CSS，首屏图片压到 10 张内，全量 WebP/AVIF。</li>
+    <li><b>复测</b>：用 PageSpeed Insights + WebPageTest 从目标市场（欧美 / 东南亚）测，再决定是否换主机或加独立 CDN。</li>
+    <li><b>策略与清理</b>：按营销目标决定是否放开 AI 爬虫；清理泛解析、演示素材、中文文件名等历史残留。</li>
+  </ol>
+</section>
+
+<section id="s9">
+  <div class="sec-head"><span class="sec-num">09</span><h2>名词小抄</h2></div>
+  <div class="tw"><table>
+    <tr><th style="width:160px">名词</th><th>人话</th><th style="width:160px">名词</th><th>人话</th></tr>
+    <tr><td>CDN / 边缘节点</td><td>全球就近取货点，访客不用跨半个地球拿内容</td><td>源站</td><td>真正存文件和数据库的服务器，这里被藏起来了</td></tr>
+    <tr><td>反向代理</td><td>前台代客跑腿，客户不知道后厨在哪</td><td>TTFB</td><td>点开网页到收到第一个字节的时间</td></tr>
+    <tr><td>Brotli</td><td>传输前压缩，680 KB 能压到 96 KB</td><td>HIT / MISS / DYNAMIC</td><td>缓存命中 / 没命中 / 不缓存（每次现做）</td></tr>
+    <tr><td>HSTS</td><td>告诉浏览器"以后只准用 https 访问"</td><td>混合内容</td><td>https 页面夹 http 资源，浏览器可能拦截</td></tr>
+    <tr><td>固定链接</td><td>网址长啥样；<code>?page_id=123</code> 最不友好</td><td>hreflang</td><td>告诉谷歌这几个网址是不同语言版本、别当抄袭</td></tr>
+    <tr><td>Sitemap</td><td>交给搜索引擎的页面清单</td><td>泛解析 <code>*</code></td><td>任何子域都能生效，方便但易被滥用</td></tr>
+    <tr><td>LiteSpeed / LSCache</td><td>一种 Web 服务器及其官方缓存插件</td><td>QUIC.cloud</td><td>LiteSpeed 官方云端 CSS/图片优化服务</td></tr>
+  </table></div>
+</section>
+
+<section id="s10">
+  <div class="sec-head"><span class="sec-num">10</span><h2>方法与边界</h2></div>
+  <div class="grid2">
+    <div class="mini"><div class="h">做了什么</div><div class="b">DNS（A / NS / MX / TXT / 随机子域对照）、HTTP GET/HEAD 响应头与跳转链、TLS 证书链与 ALPN、公开 RDAP 注册信息、404 页服务器签名、robots.txt、WordPress 常见公开端点、首页 HTML 静态分析（生成器标记、主题/插件路径、脚本域名、链接结构、内联资源统计）、多次 TTFB 采样。</div></div>
+    <div class="mini"><div class="h">没做什么</div><div class="b">未登录后台、未做漏洞扫描 / 渗透 / 压力测试、未对源站发起任何主动探测，也未尝试绕过 CDN 找真实 IP。全程只读取公开可见信息。</div></div>
+    <div class="mini"><div class="h">不能确定的</div><div class="b">源站真实 IP、机房地理位置、云服务商、Cloudflare 具体套餐（从 <code>DYNAMIC</code> 与通用证书看，大概率免费版或 Pro 版且未启用 APO）、PHP / MySQL 具体版本。</div></div>
+    <div class="mini"><div class="h">数据偏差</div><div class="b">检测流量经本地代理出境，CF-RAY 落在 LAX / SEA 是出口节点，与源站位置无关；所有耗时只适合三站横向比较，不代表真实客户体验。</div></div>
+  </div>
+  <div class="foot" style="margin-top:26px">报告生成于 2026-11-11 · 数据来源：对上述三个站点的公开被动探测 · 结论中标注「推测」的部分请勿作为迁移或采购决策的唯一依据。</div>
+</section>
+
+</div>
+</body>
+</html>

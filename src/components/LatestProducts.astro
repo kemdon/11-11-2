@@ -1,0 +1,109 @@
+---
+import ProductCard from './ProductCard.astro';
+import { getProducts } from '../lib/site-content';
+
+interface Props {
+  locale: string;
+  defaultLocale: string;
+  title?: string;
+  label?: string;
+}
+
+const { locale, defaultLocale, title, label } = Astro.props;
+const allProducts = await getProducts(locale, defaultLocale);
+const latestProducts = allProducts.slice(0, 4); // Show top 4
+
+const displayLabel = label === "Explore Products"
+  ? (locale === 'en' ? 'Explore Products' : locale === 'zh-TW' ? '探索產品' : '探索产品')
+  : label;
+---
+
+{latestProducts.length > 0 && (
+  <section class="latest-products section-padding">
+    <div class="container">
+      <div class="section-head fade-in-up">
+        {displayLabel && <span class="section-kicker">{displayLabel}</span>}
+        {title && <h2 class="section-title">{title}</h2>}
+      </div>
+
+      <div class="products-grid">
+        {latestProducts.map((product) => (
+          <ProductCard
+            title={product.title}
+            brand={product.brand}
+            oneLiner={product.oneLiner}
+            keywords={product.keywords}
+            mainImage={product.mainImage}
+            slug={product.slug || ''}
+            locale={locale}
+            defaultLocale={defaultLocale}
+          />
+        ))}
+      </div>
+
+      <div class="section-footer fade-in-up">
+        <a href={locale === defaultLocale ? '/products' : `/${locale}/products`} class="view-all-link">
+          {locale === 'en' ? 'View All Products' : locale === 'zh-TW' ? '查看全部產品' : '查看全部产品'}
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .section-head {
+    margin-bottom: 3rem;
+  }
+
+  .section-kicker {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .section-footer {
+    text-align: center;
+  }
+
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: gap 0.3s ease;
+  }
+
+  .view-all-link:hover {
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 1024px) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

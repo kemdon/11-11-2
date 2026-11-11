@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getLocaleConfig, getProducts, getSiteSettings } from '../lib/site-content';
+
+const { defaultLocale } = await getLocaleConfig();
+const site = await getSiteSettings(defaultLocale);
+const products = await getProducts(defaultLocale, site.defaultLocale);
+const machineOrder = [
+  'heavy-pad-machine', 'paper-pad-machine', 'bubble-paper-machine',
+  'honeycomb-dispenser', 'manual-dispenser', 'cardboard-shredder',
+];
+const machines = machineOrder
+  .map((slug) => products.find((product) => product.slug === slug))
+  .filter(Boolean);
+
+const capabilities = [
+  { no: '01', title: '吹膜', body: '空气缓冲包装原膜生产' },
+  { no: '02', title: '印刷', body: '包装印刷与品牌定制' },
+  { no: '03', title: '制袋', body: '气柱袋、葫芦膜制袋加工' },
+  { no: '04', title: '纸类制品', body: '蜂窝纸与纸缓冲制品' },
+  { no: '05', title: '包装设备', body: '纸垫、压泡、走纸与膨切设备' },
+  { no: '06', title: '现场方案', body: '自动开箱、封箱与打包系统' },
+];
+---
+
+<Layout
+  title="设备与方案 | 笑纳包装 ShinerPack"
+  description="纸垫机、压泡机、蜂窝纸走纸机、纸板膨切机与全自动填充打包系统，为电商、物流与大型客户提供从耗材到整线的包装作业方案。"
+  lang={defaultLocale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  ogImage={site.defaultOgImage}
+>
+  <Navbar site={site} locale={defaultLocale} currentPath="/solutions" />
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="面包屑"><a href="/">首页</a><span>/</span><span>设备与方案</span></nav>
+        <span class="eyebrow">EQUIPMENT & SOLUTIONS</span>
+        <h1>让纸包装，<br />在作业现场<span>即用即出</span></h1>
+        <p class="lead">从桌面型走纸机到产线级纸垫机，再到自动开箱、封箱与打包系统，按实际包装量匹配设备与耗材。</p>
+      </div>
+    </section>
+
+    <section class="section machine-section">
+      <div class="container">
+        <div class="section-head-grid">
+          <div>
+            <span class="eyebrow">PAPER MACHINES</span>
+            <h2 class="section-title">设备矩阵</h2>
+          </div>
+          <p class="lead">同一套纸质耗材可适配不同设备：小型网点选桌面机，流水线选纸垫机与收卷设备，废纸箱也能通过膨切机变成缓冲材料。</p>
+        </div>
+
+        <div class="machine-list">
+          {machines.map((machine, index) => (
+            <a class="machine-row" href={`/products/${machine.slug}`}>
+              <span class="machine-no">0{index + 1}</span>
+              <div class="machine-media">
+                {machine.mainImage && <img src={machine.mainImage} alt={`${machine.title} 产品实拍`} loading="eager" />}
+              </div>
+              <div class="machine-copy">
+                <span class="machine-model">{machine.partNumber || 'PAPER MACHINE'}</span>
+                <h3>{machine.title}</h3>
+                <p>{machine.oneLiner}</p>
+                {machine.keywords && machine.keywords.length > 0 && (
+                  <div class="machine-specs">{machine.keywords.slice(0, 4).map((item) => <span>{item}</span>)}</div>
+                )}
+              </div>
+              <span class="machine-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark onsite">
+      <div class="container onsite-grid">
+        <div class="onsite-media">
+          <div class="image-frame"><img src="/images/warehouse.webp" alt="仓库里堆放的牛皮纸卷与成品纸箱，远处有货架与手动叉车" width="2000" height="1125" loading="eager" /></div>
+          <p class="photo-caption dark"><span>FIG. 01</span> 成品与耗材的仓储交付现场</p>
+        </div>
+        <div class="onsite-copy">
+          <span class="eyebrow">ON-SITE SYSTEMS</span>
+          <h2 class="section-title">面向大型客户的<br /><span class="accent">现场包装作业系统</span></h2>
+          <div class="onsite-items">
+            <div>
+              <h3>全自动填充打包系统</h3>
+              <p>集自动化开箱、自动化封箱、四角封箱与 PP 带自动打包于一体，可配套自动折盖封箱机、自动贴单机、自动分拣机与自动封切收缩包机。产品册标注可节约 90% 以上人工成本、提高 50% 以上打包速度。</p>
+            </div>
+            <div>
+              <h3>自动十字封箱机</h3>
+              <p>适用 1–12 号邮政纸箱封箱贴单，可单机使用，也可与自动化包装流水线配套，广泛应用于仓储、物流与电商行业。</p>
+            </div>
+            <div>
+              <h3>湿水牛皮纸胶带机</h3>
+              <p>出纸速度 40M/min，尺寸 468×297×310mm，重量 12.3kg，功率 110W，适用胶带宽度 30–100mm，支持触屏、红外感应与脚踏多种出纸方式。</p>
+            </div>
+          </div>
+          <a class="btn btn--outline" href="/contact">咨询现场方案 <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section capability">
+      <div class="container">
+        <div class="section-head-grid">
+          <div>
+            <span class="eyebrow">ONE-STOP CAPABILITY</span>
+            <h2 class="section-title">从原料到交付的<br /><span class="accent">一站式服务</span></h2>
+          </div>
+          <p class="lead">吹膜、印刷与制袋的一站式服务，叠加纸类制品、包装设备与现场作业系统，让产品与机器可以在同一套方案里协同。</p>
+        </div>
+        <div class="capability-grid">
+          {capabilities.map((item) => (
+            <div class="capability-item">
+              <span class="number-tag">{item.no}</span>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight solutions-cta">
+      <div class="container solutions-cta-grid">
+        <div>
+          <span class="eyebrow">CUSTOMIZATION</span>
+          <h2 class="section-title">规格、颜色、外观与印刷，<br />都可以按需定制</h2>
+        </div>
+        <div>
+          <p class="lead">包装产品与机器支持定制规格、颜色、外观与印刷。若您需要针对特定产品、包装节拍或产线空间做方案评估，欢迎直接与我们联系。</p>
+          <a class="btn btn--solid" href="/contact">获取方案与报价 <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer site={site} locale={defaultLocale} />
+</Layout>
+
+<style>
+  .page-hero { background: var(--ink); color: var(--white); padding-top: calc(var(--header-h) + 76px); padding-bottom: 92px; }
+  .crumbs { display: flex; gap: 12px; margin-bottom: 40px; font-size: 12px; color: rgba(255, 255, 255, 0.45); }
+  .crumbs a:hover { color: var(--white); }
+  .page-hero .eyebrow { color: var(--kraft-light); }
+  .page-hero h1 { margin-top: 24px; font-size: clamp(2.7rem, 6vw, 5rem); line-height: 1.14; letter-spacing: -0.045em; }
+  .page-hero h1 span { color: var(--kraft-light); }
+  .page-hero .lead { margin-top: 26px; max-width: 58ch; color: rgba(255, 255, 255, 0.7); }
+
+  .section-head-grid { display: grid; grid-template-columns: 1fr 0.9fr; gap: 70px; align-items: end; margin-bottom: 52px; }
+
+  .machine-list { border-top: 1px solid var(--line); }
+  .machine-row { display: grid; grid-template-columns: 44px 180px 1fr 28px; gap: 26px; align-items: center; padding: 22px 12px; border-bottom: 1px solid var(--line); transition: background 0.3s var(--ease), padding 0.3s var(--ease); }
+  .machine-row:hover { background: var(--paper-deep); padding-left: 22px; padding-right: 22px; }
+  .machine-no { font-family: var(--font-display); font-size: 12px; letter-spacing: 0.1em; color: var(--clay); }
+  .machine-media { display: grid; place-items: center; height: 130px; background: radial-gradient(circle at 50% 45%, #fdfaf3 0%, #e9dfcc 100%); padding: 14px; }
+  .machine-media img { max-height: 100%; width: auto; object-fit: contain; mix-blend-mode: multiply; }
+  .machine-model { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.14em; color: var(--clay); }
+  .machine-copy h3 { margin-top: 8px; font-size: 21px; }
+  .machine-copy p { margin-top: 8px; font-size: 13px; line-height: 1.8; color: var(--muted); max-width: 62ch; }
+  .machine-specs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .machine-specs span { padding: 4px 10px; border: 1px solid var(--line); font-size: 11px; color: var(--muted); }
+  .machine-arrow { font-size: 19px; color: var(--clay); }
+
+  .onsite-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(50px, 7vw, 100px); align-items: start; }
+  .onsite-media .image-frame { aspect-ratio: 4 / 3.4; }
+  .photo-caption { display: flex; gap: 16px; margin-top: 16px; font-size: 12px; color: var(--muted); }
+  .photo-caption.dark { color: rgba(246, 242, 233, 0.55); }
+  .photo-caption span { font-family: var(--font-display); letter-spacing: 0.14em; color: var(--kraft-light); }
+  .onsite-copy .lead { margin-top: 24px; }
+  .onsite-items { margin-top: 38px; border-top: 1px solid var(--line-light); }
+  .onsite-items > div { padding: 22px 0; border-bottom: 1px solid var(--line-light); }
+  .onsite-items h3 { font-size: 17px; color: var(--white); }
+  .onsite-items p { margin-top: 10px; font-size: 13px; line-height: 1.9; color: rgba(246, 242, 233, 0.6); }
+  .onsite-copy .btn { margin-top: 34px; }
+
+  .capability { background: var(--paper-deep); }
+  .capability-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .capability-item { padding: 30px 20px; background: var(--paper-deep); }
+  .capability-item h3 { margin-top: 22px; font-size: 18px; }
+  .capability-item p { margin-top: 8px; font-size: 12px; line-height: 1.75; color: var(--muted); }
+
+  .solutions-cta { border-top: 1px solid var(--line); }
+  .solutions-cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+  .solutions-cta .btn { margin-top: 28px; }
+
+  @media (max-width: 1000px) {
+    .capability-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .section-head-grid, .onsite-grid, .solutions-cta-grid { grid-template-columns: 1fr; gap: 40px; }
+    .machine-row { grid-template-columns: 34px 120px 1fr 20px; gap: 16px; }
+    .machine-media { height: 100px; }
+    .machine-copy h3 { font-size: 18px; }
+  }
+  @media (max-width: 620px) {
+    .machine-row { grid-template-columns: 28px 1fr 18px; }
+    .machine-media { display: none; }
+    .capability-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

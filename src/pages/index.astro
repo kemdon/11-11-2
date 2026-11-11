@@ -1,0 +1,449 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getLocaleConfig, getSiteSettings } from '../lib/site-content';
+
+const { defaultLocale } = await getLocaleConfig();
+const site = await getSiteSettings(defaultLocale);
+
+const series = [
+  {
+    no: '01',
+    title: '蜂窝纸缓冲包装',
+    en: 'HONEYCOMB CUSHIONING',
+    body: '蜂窝纸信封袋、瓦楞纸与压泡纸信封袋、蜂巢纸保护套与蜂巢内托，以纯纸结构替代塑料气泡袋。',
+    image: '/images/products/honeycomb-mailer.webp',
+    alt: '牛皮纸蜂窝纸信封袋叠放，露出蜂窝纸内衬',
+    href: '/products/honeycomb-mailer',
+  },
+  {
+    no: '02',
+    title: '纸类耗材与胶带',
+    en: 'PAPER CONSUMABLES',
+    body: '蜂窝纸卷材、片材、折叠式缓冲纸与湿水牛皮纸胶带，适配手工打包与自动化设备。',
+    image: '/images/products/kraft-paper-tape.webp',
+    alt: '牛皮纸胶带卷与胶带条',
+    href: '/products/kraft-paper-tape',
+  },
+  {
+    no: '03',
+    title: '包装机械设备',
+    en: 'PACKAGING MACHINES',
+    body: '纸垫机、压泡机、蜂窝纸走纸机与纸板膨切机，覆盖从桌面型到产线级的包装作业。',
+    image: '/images/products/honeycomb-dispenser.webp',
+    alt: '电动蜂窝纸走纸机与蜂窝纸卷',
+    href: '/solutions',
+  },
+];
+
+const applications = [
+  { no: '01', title: '电子产品与精密仪器', body: '缓冲防震、防刮，减少运输途中的震动与跌落损害。' },
+  { no: '02', title: '玻璃、陶瓷与酒类', body: '蜂巢纸套与内托贴合瓶身、器型，360° 包裹防护。' },
+  { no: '03', title: '化妆品与礼品', body: '天然纸色与可定制印刷，兼顾保护性与开箱观感。' },
+  { no: '04', title: '水果、茶具与生鲜', body: '按需定制纸托与保温衬片，适配多样化包装形态。' },
+];
+
+const machines = [
+  { image: '/images/products/heavy-pad-machine.webp', alt: '重型缓冲纸垫机', label: '纸垫机' },
+  { image: '/images/products/bubble-paper-machine.webp', alt: '台式压泡机 YP-C300', label: '压泡机' },
+  { image: '/images/products/cardboard-shredder.webp', alt: '纸板膨切机 PQ-C325', label: '膨切机' },
+];
+---
+
+<Layout
+  title="以纸，替代塑料 | 笑纳包装 ShinerPack"
+  description="广东笑纳包装有限公司（ShinerPack）专注环保纸缓冲包装与包装机械的研发制造，提供蜂窝纸、纸信封袋、牛皮纸胶带、纸垫机、压泡机及现场包装方案。"
+  lang={defaultLocale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  ogImage={site.defaultOgImage}
+>
+  <Navbar site={site} locale={defaultLocale} currentPath="/" />
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-label="笑纳包装 · 环保纸缓冲包装系统">
+      <img class="hero-img" src="/images/hero.webp" alt="包装工作台上，工人拉伸牛皮蜂窝纸，旁边摆放玻璃瓶、陶瓷杯与纸箱" width="2000" height="1125" fetchpriority="high" />
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="hero-kicker"><span></span> GUANGDONG SHINER PACKAGING CO., LTD.</p>
+          <h1>以纸，<br /><em>替代塑料</em></h1>
+          <p class="hero-lead">从蜂窝纸信封袋到缓冲纸垫机，为全球客户提供可回收、可降解的纸缓冲包装产品与整套包装作业方案。</p>
+          <div class="hero-actions">
+            <a class="btn btn--light" href="/products">查看产品体系 <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="btn btn--outline" href="/about">了解制造实力 <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-foot">
+        <div class="container hero-foot-inner">
+          <div class="hero-stats">
+            <div><strong>3</strong><span>座研发制造基地</span></div>
+            <div><strong>30,000㎡</strong><span>工厂总面积</span></div>
+            <div><strong>150</strong><span>台自动化生产设备</span></div>
+            <div><strong>20+</strong><span>产品远销国家</span></div>
+          </div>
+          <span class="hero-scroll">SCROLL ↓</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREDENTIALS STRIP -->
+    <section class="cred-strip" aria-label="认证与资质">
+      <div class="container cred-inner">
+        <span class="cred-label">QUALIFICATIONS</span>
+        <ul>
+          <li>ISO9001 质量体系认证</li>
+          <li>欧美 SGS 认证</li>
+          <li>CE 认证</li>
+          <li>ROHS 检测</li>
+          <li>17 项实用新型专利 · 1 项行业核心发明专利</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="section intro">
+      <div class="container intro-grid">
+        <div class="intro-head">
+          <span class="eyebrow">ABOUT SHINERPACK</span>
+          <h2 class="section-title">从一张牛皮纸，<br />到一整套<span class="accent">缓冲包装方案</span></h2>
+          <a class="text-link" href="/about">了解笑纳包装 <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="intro-body">
+          <p class="lead">笑纳包装是一家专注于生态环境保护新材料、空气缓冲包装及包装机械研发、制造和销售的高新技术企业。我们提供吹膜、印刷和制袋的一站式服务，产品涵盖气柱包装、葫芦膜、缓冲气垫机、蜂窝纸及相关设备。</p>
+          <p class="lead">公司在东莞、惠州、深圳等地设有多个研发和制造基地，拥有完整且科学的质量管理体系，产品远销北美、欧盟、日韩及东南亚等 20 多个国家。</p>
+          <div class="capability-list">
+            <div><span class="number-tag">01</span><h3>研发与制造一体</h3><p>三大厂区协同，从原膜、制袋到纸类制品完整覆盖。</p></div>
+            <div><span class="number-tag">02</span><h3>灵活的定制服务</h3><p>包装产品与机器可定制规格、颜色、外观与印刷。</p></div>
+            <div><span class="number-tag">03</span><h3>现场包装方案</h3><p>为大型客户提供现场包装解决方案与作业系统。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCT SYSTEM -->
+    <section class="section section--paper-deep range">
+      <div class="container">
+        <div class="range-head">
+          <div>
+            <span class="eyebrow">PRODUCT SYSTEM</span>
+            <h2 class="section-title">一条产品线，<br />覆盖包装的每一步</h2>
+          </div>
+          <div class="range-head-side">
+            <p class="lead">以 100% 纸质材料替代塑料缓冲包装，覆盖信封袋、卷材、片材、保护套、内托、胶带、耗材与设备；规格、颜色与印刷均可按需定制。</p>
+            <a class="btn btn--ghost" href="/products">浏览全部产品 <span class="arrow" aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+
+        <div class="range-grid">
+          <a class="range-feature" href={series[0].href}>
+            <div class="range-feature-media">
+              <img src={series[0].image} alt={series[0].alt} width="725" height="531" loading="eager" />
+              <span class="range-feature-index">FEATURED / 01</span>
+            </div>
+            <div class="range-feature-copy">
+              <span class="eyebrow">{series[0].en}</span>
+              <h3>{series[0].title}</h3>
+              <p>{series[0].body}</p>
+              <span class="range-more">查看产品 <span aria-hidden="true">↗</span></span>
+            </div>
+          </a>
+
+          <div class="range-list">
+            {series.slice(1).map((item) => (
+              <a class="range-row" href={item.href}>
+                <span class="number-tag">{item.no}</span>
+                <div class="range-row-copy">
+                  <h3>{item.title}</h3>
+                  <span class="range-row-en">{item.en}</span>
+                  <p>{item.body}</p>
+                </div>
+                <div class="range-row-media"><img src={item.image} alt={item.alt} loading="eager" /></div>
+                <span class="range-row-arrow" aria-hidden="true">↗</span>
+              </a>
+            ))}
+            <div class="range-note">
+              <span class="number-tag">FULL RANGE</span>
+              <p>另有蜂窝纸卷材、蜂巢内托、盒装蜂窝纸、成品小包、纸缠绕膜、冷链保温衬片等纸类创新产品，详见产品体系页面。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MATERIAL CLOSE-UP -->
+    <section class="section material">
+      <div class="container material-grid">
+        <div class="material-media">
+          <div class="image-frame material-photo">
+            <img src="/images/honeycomb.webp" alt="拉伸后的牛皮蜂窝纸 3D 蜂窝单元微距特写，可见纸张纤维与自然光影" width="2000" height="1500" loading="eager" />
+          </div>
+          <p class="photo-caption"><span>FIG. 01</span> 蜂窝纸拉伸后的 3D 立体结构与纸张纤维</p>
+        </div>
+        <div class="material-copy">
+          <span class="eyebrow">MATERIAL SCIENCE</span>
+          <h2 class="section-title">结构本身，<br />就是最好的<span class="accent">缓冲</span></h2>
+          <p class="lead">纸张经特殊技术切割出蜂窝状结构，拉伸后形成起角蜂窝单元。纸材的可塑性与蜂窝结构的延展性结合，让一张纸同时具备缓冲、包裹与展示的能力。</p>
+          <dl class="material-specs">
+            <div><dt>01 / 环保可降解</dt><dd>100% 纸质材料，可完全回收并生物降解</dd></div>
+            <div><dt>02 / 保护性强</dt><dd>3D 蜂窝结构缓冲震动与跌落损害</dd></div>
+            <div><dt>03 / 节省空间</dt><dd>1:60 拉伸比例，比气泡袋少占 80% 存储空间</dd></div>
+            <div><dt>04 / 使用便捷</dt><dd>拉伸即用、无需胶带或胶水，可贴合不规则形状</dd></div>
+          </dl>
+          <a class="text-link" href="/products/honeycomb-roll">查看蜂窝纸卷材参数 <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPLICATIONS -->
+    <section class="section section--dark applications">
+      <div class="container applications-grid">
+        <div class="applications-media">
+          <div class="image-frame">
+            <img src="/images/hands.webp" alt="包装工人用拉伸后的蜂窝纸包裹玻璃瓶，桌面上放着蜂窝纸卷与纸箱" width="2000" height="1500" loading="eager" />
+          </div>
+          <p class="photo-caption dark"><span>FIG. 02</span> 手工包裹易碎品的真实打包场景</p>
+        </div>
+        <div class="applications-copy">
+          <span class="eyebrow">APPLICATIONS</span>
+          <h2 class="section-title">保护每一件<br /><span class="accent">需要被认真对待</span>的货物</h2>
+          <p class="lead">蜂窝缓冲纸适用于电子产品、化妆品、玻璃制品、书籍、酒类、水果、陶瓷与茶具等多种商品，扁平存储、即用即包，兼顾运输安全与包装美观。</p>
+          <div class="app-list">
+            {applications.map((item) => (
+              <div class="app-item">
+                <span class="number-tag">{item.no}</span>
+                <div><h3>{item.title}</h3><p>{item.body}</p></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FACTORY BAND -->
+    <section class="factory-band" aria-label="制造实力">
+      <img src="/images/factory.webp" alt="纸包装生产车间里的大型牛皮纸卷、纸垫加工设备、成堆瓦楞纸板与工人" width="2000" height="1125" loading="eager" />
+      <div class="factory-shade" aria-hidden="true"></div>
+      <div class="container factory-inner">
+        <span class="eyebrow">MANUFACTURING</span>
+        <h2>三座厂区，一条完整的<br />纸包装制造链路</h2>
+        <div class="factory-numbers">
+          <div><strong>3</strong><span>座原膜 / 制袋 / 纸类工厂</span></div>
+          <div><strong>30,000㎡</strong><span>工厂面积</span></div>
+          <div><strong>150 台</strong><span>自动化生产设备</span></div>
+          <div><strong>30 吨</strong><span>日产量</span></div>
+          <div><strong>200 名</strong><span>员工</span></div>
+        </div>
+        <a class="btn btn--outline" href="/about">走进笑纳包装 <span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <!-- EQUIPMENT + DELIVERY -->
+    <section class="section systems">
+      <div class="container systems-grid">
+        <div class="systems-media">
+          <div class="image-frame"><img src="/images/warehouse.webp" alt="仓库里托盘堆放的牛皮纸卷与成品纸箱，远处有货架与手动叉车" width="2000" height="1125" loading="eager" /></div>
+          <div class="systems-thumb-row">
+            {machines.map((machine) => (
+              <div class="machine-thumb">
+                <img src={machine.image} alt={machine.alt} loading="eager" />
+                <span>{machine.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="systems-copy">
+          <span class="eyebrow">EQUIPMENT & SOLUTIONS</span>
+          <h2 class="section-title">从耗材到设备，<br />从单机到<span class="accent">整线</span></h2>
+          <p class="lead">除纸类耗材外，我们提供纸垫机、压泡机、蜂窝纸走纸机、纸板膨切机与湿水胶带机，并可为大型客户配套自动开箱、封箱、贴单与打包的现场作业系统。</p>
+          <ul class="systems-points">
+            <li><span>01</span>桌面型设备适配办公室、门店与中小发货网点</li>
+            <li><span>02</span>产线级纸垫机可集成流水线，即用即出</li>
+            <li><span>03</span>全自动填充打包系统覆盖开箱、封箱与打包</li>
+          </ul>
+          <a class="btn btn--solid" href="/solutions">查看设备与方案 <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTNER CTA -->
+    <section class="section section--tight partner">
+      <div class="container partner-grid">
+        <div>
+          <span class="eyebrow">GLOBAL DISTRIBUTOR NETWORK</span>
+          <h2 class="section-title">我们正在建立<br />全球的<span class="accent">经销商网络</span></h2>
+        </div>
+        <div class="partner-side">
+          <p class="lead">如果您在某个国家或区域拥有包装材料市场经验，或在电子商务领域拥有经验，欢迎成为我们在当地的区域性战略合作伙伴。我们提供产品素材、营销方案、灵活定制与促销价格支持。</p>
+          <div class="partner-actions">
+            <a class="btn btn--solid" href="/contact">洽谈合作 <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="partner-contact" href="mailto:shiner@shinerpack.com">shiner@shinerpack.com</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer site={site} locale={defaultLocale} />
+</Layout>
+
+<style>
+  /* HERO */
+  .hero { position: relative; min-height: min(92vh, 900px); display: flex; align-items: center; overflow: hidden; background: var(--ink); color: var(--white); }
+  .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 58% center; }
+  .hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(12, 24, 19, 0.92) 0%, rgba(12, 24, 19, 0.76) 30%, rgba(12, 24, 19, 0.28) 62%, rgba(12, 24, 19, 0.08) 100%), linear-gradient(0deg, rgba(12, 24, 19, 0.72) 0%, transparent 32%); }
+  .hero-inner { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding-top: calc(var(--header-h) + 40px); padding-bottom: 130px; }
+  .hero-copy { max-width: 680px; }
+  .hero-kicker { display: flex; align-items: center; gap: 14px; font-size: 11px; font-weight: 600; letter-spacing: 0.22em; color: var(--kraft-light); }
+  .hero-kicker span { width: 30px; height: 1px; background: currentColor; }
+  .hero h1 { margin-top: 34px; font-size: clamp(3.4rem, 8vw, 7rem); line-height: 1.04; letter-spacing: -0.055em; font-weight: 600; }
+  .hero h1 em { font-style: normal; color: var(--kraft-light); }
+  .hero-lead { margin-top: 30px; max-width: 34em; font-size: clamp(1rem, 1.3vw, 1.2rem); line-height: 1.9; color: rgba(255, 255, 255, 0.82); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 42px; }
+  .hero-vertical { writing-mode: vertical-rl; font-family: var(--font-display); font-size: 10px; letter-spacing: 0.3em; color: rgba(255, 255, 255, 0.55); }
+  .hero-foot { position: absolute; z-index: 2; bottom: 0; left: 0; right: 0; border-top: 1px solid rgba(255, 255, 255, 0.2); background: rgba(12, 24, 19, 0.34); backdrop-filter: blur(6px); }
+  .hero-foot-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 20px; padding-bottom: 20px; }
+  .hero-stats { display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 64px); }
+  .hero-stats div { display: grid; gap: 2px; }
+  .hero-stats strong { font-family: var(--font-display); font-size: 25px; font-weight: 600; color: var(--white); line-height: 1.1; }
+  .hero-stats span { font-size: 11px; letter-spacing: 0.08em; color: rgba(255, 255, 255, 0.6); }
+  .hero-scroll { font-family: var(--font-display); font-size: 10px; letter-spacing: 0.24em; color: rgba(255, 255, 255, 0.6); white-space: nowrap; }
+
+  /* CREDENTIALS */
+  .cred-strip { background: var(--paper-deep); border-bottom: 1px solid var(--line); }
+  .cred-inner { display: flex; align-items: center; gap: 42px; padding-top: 22px; padding-bottom: 22px; }
+  .cred-label { flex-shrink: 0; font-family: var(--font-display); font-size: 10px; letter-spacing: 0.24em; color: var(--clay); }
+  .cred-inner ul { display: flex; flex-wrap: wrap; gap: 10px 34px; font-size: 13px; color: var(--muted); }
+  .cred-inner li { display: flex; align-items: center; gap: 10px; }
+  .cred-inner li::before { content: ""; width: 4px; height: 4px; background: var(--kraft); border-radius: 50%; }
+
+  /* INTRO */
+  .intro-grid { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: clamp(50px, 8vw, 130px); }
+  .intro-head .section-title { margin-bottom: 36px; }
+  .text-link { display: inline-flex; align-items: center; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--ink); font-size: 14px; font-weight: 600; letter-spacing: 0.04em; }
+  .text-link:hover { color: var(--clay); border-color: var(--clay); }
+  .text-link span { font-size: 17px; }
+  .intro-body > .lead + .lead { margin-top: 20px; }
+  .capability-list { margin-top: 44px; border-top: 1px solid var(--line); }
+  .capability-list > div { display: grid; grid-template-columns: 48px 1fr; column-gap: 16px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .capability-list .number-tag { grid-row: span 2; padding-top: 4px; color: var(--clay); }
+  .capability-list h3 { font-size: 17px; margin-bottom: 4px; }
+  .capability-list p { font-size: 13px; color: var(--muted); }
+
+  /* RANGE */
+  .range-head { display: grid; grid-template-columns: 1fr 0.85fr; gap: 60px; align-items: end; margin-bottom: 56px; }
+  .range-head-side { padding-bottom: 6px; }
+  .range-head-side .lead { margin-bottom: 26px; }
+  .range-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 24px; }
+  .range-feature { display: block; background: var(--paper-card); border: 1px solid rgba(20, 35, 30, 0.08); transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); }
+  .range-feature:hover { transform: translateY(-5px); box-shadow: 0 26px 50px rgba(20, 35, 30, 0.12); }
+  .range-feature-media { position: relative; display: grid; place-items: center; height: 360px; background: radial-gradient(circle at 50% 45%, #fdfaf3 0%, #e9dfcc 100%); padding: 34px; overflow: hidden; }
+  .range-feature-media img { max-height: 100%; width: auto; object-fit: contain; mix-blend-mode: multiply; }
+  .range-feature-index { position: absolute; top: 18px; left: 22px; font-family: var(--font-display); font-size: 10px; letter-spacing: 0.18em; color: var(--clay); }
+  .range-feature-copy { padding: 32px 36px 36px; }
+  .range-feature-copy .eyebrow { font-size: 10px; }
+  .range-feature-copy h3 { margin-top: 16px; font-size: 27px; }
+  .range-feature-copy p { margin-top: 12px; font-size: 14px; line-height: 1.85; color: var(--muted); max-width: 42ch; }
+  .range-more { display: inline-flex; gap: 10px; margin-top: 26px; font-size: 13px; font-weight: 600; border-bottom: 1px solid var(--ink); padding-bottom: 6px; }
+
+  .range-list { display: grid; align-content: start; }
+  .range-row { display: grid; grid-template-columns: 34px 1fr 120px 24px; gap: 18px; align-items: center; padding: 24px 22px; background: var(--paper-card); border: 1px solid rgba(20, 35, 30, 0.08); transition: background 0.3s var(--ease), transform 0.3s var(--ease); }
+  .range-row + .range-row { margin-top: 14px; }
+  .range-row:hover { background: var(--white); transform: translateX(4px); }
+  .range-row-copy h3 { font-size: 19px; }
+  .range-row-en { display: block; margin-top: 4px; font-family: var(--font-display); font-size: 10px; letter-spacing: 0.14em; color: var(--clay); }
+  .range-row-copy p { margin-top: 10px; font-size: 12.5px; line-height: 1.75; color: var(--muted); }
+  .range-row-media { display: grid; place-items: center; height: 96px; background: #f0e7d7; padding: 10px; }
+  .range-row-media img { max-height: 100%; width: auto; object-fit: contain; mix-blend-mode: multiply; }
+  .range-row-arrow { align-self: start; font-size: 17px; color: var(--clay); }
+  .range-note { display: flex; gap: 20px; align-items: baseline; padding: 24px 22px; border: 1px dashed rgba(20, 35, 30, 0.2); }
+  .range-note p { font-size: 12.5px; line-height: 1.8; color: var(--muted); }
+
+  /* MATERIAL */
+  .material-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: clamp(50px, 7vw, 110px); align-items: center; }
+  .material-photo { aspect-ratio: 4 / 3; }
+  .photo-caption { display: flex; gap: 16px; margin-top: 16px; font-size: 12px; color: var(--muted); }
+  .photo-caption span { font-family: var(--font-display); letter-spacing: 0.14em; color: var(--clay); }
+  .photo-caption.dark { color: rgba(246, 242, 233, 0.55); }
+  .photo-caption.dark span { color: var(--kraft-light); }
+  .material-copy .lead { margin-top: 26px; }
+  .material-specs { margin-top: 36px; border-top: 1px solid var(--line); }
+  .material-specs > div { display: grid; grid-template-columns: 1fr; gap: 4px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .material-specs dt { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--forest); }
+  .material-specs dd { font-size: 14px; color: var(--muted); }
+  .material-copy .text-link { margin-top: 34px; }
+
+  /* APPLICATIONS */
+  .applications-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(50px, 7vw, 110px); align-items: center; }
+  .applications-media .image-frame { aspect-ratio: 4 / 4.4; }
+  .applications-media img { filter: saturate(0.92); }
+  .applications-copy .lead { margin-top: 26px; }
+  .app-list { margin-top: 42px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line-light); border: 1px solid var(--line-light); }
+  .app-item { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 24px; background: var(--ink); }
+  .app-item h3 { font-size: 15px; color: var(--white); }
+  .app-item p { margin-top: 8px; font-size: 12.5px; line-height: 1.75; color: rgba(246, 242, 233, 0.55); }
+
+  /* FACTORY */
+  .factory-band { position: relative; min-height: 560px; display: flex; align-items: center; overflow: hidden; color: var(--white); }
+  .factory-band > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .factory-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(12, 24, 19, 0.92) 0%, rgba(12, 24, 19, 0.72) 48%, rgba(12, 24, 19, 0.2) 100%); }
+  .factory-inner { position: relative; z-index: 2; padding-top: 80px; padding-bottom: 80px; }
+  .factory-inner h2 { margin-top: 24px; font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.25; letter-spacing: -0.03em; }
+  .factory-numbers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; margin-top: 48px; margin-bottom: 40px; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.18); }
+  .factory-numbers > div { display: grid; gap: 6px; padding: 22px 18px; background: rgba(12, 24, 19, 0.72); }
+  .factory-numbers strong { font-family: var(--font-display); font-size: clamp(1.4rem, 2.2vw, 2.1rem); font-weight: 600; color: var(--kraft-light); }
+  .factory-numbers span { font-size: 11px; letter-spacing: 0.06em; color: rgba(255, 255, 255, 0.62); }
+
+  /* SYSTEMS */
+  .systems-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(50px, 7vw, 110px); align-items: center; }
+  .systems-media .image-frame { aspect-ratio: 16 / 10; }
+  .systems-thumb-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  .machine-thumb { display: grid; place-items: center; position: relative; height: 130px; background: var(--paper-deep); padding: 12px; }
+  .machine-thumb img { max-height: 100px; width: auto; object-fit: contain; mix-blend-mode: multiply; }
+  .machine-thumb span { position: absolute; bottom: 8px; left: 10px; font-size: 11px; color: var(--muted); }
+  .systems-copy .lead { margin-top: 26px; }
+  .systems-points { margin-top: 32px; margin-bottom: 36px; border-top: 1px solid var(--line); }
+  .systems-points li { display: flex; gap: 18px; padding: 15px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .systems-points span { font-family: var(--font-display); font-size: 12px; color: var(--clay); }
+
+  /* PARTNER */
+  .partner { background: var(--paper-deep); border-top: 1px solid var(--line); }
+  .partner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+  .partner-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; margin-top: 32px; }
+  .partner-contact { font-family: var(--font-display); font-size: 15px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; }
+  .partner-contact:hover { color: var(--clay); border-color: var(--clay); }
+
+  @media (max-width: 1080px) {
+    .intro-grid, .range-grid, .material-grid, .applications-grid, .systems-grid, .partner-grid { gap: 46px; }
+    .range-head { grid-template-columns: 1fr 0.8fr; gap: 36px; }
+    .factory-numbers { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .hero { min-height: 760px; }
+    .hero-inner { padding-top: calc(var(--header-h) + 60px); padding-bottom: 160px; }
+    .hero-vertical { display: none; }
+    .hero-shade { background: linear-gradient(90deg, rgba(12, 24, 19, 0.93) 0%, rgba(12, 24, 19, 0.78) 55%, rgba(12, 24, 19, 0.35) 100%), linear-gradient(0deg, rgba(12, 24, 19, 0.7) 0%, transparent 40%); }
+    .cred-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .intro-grid, .range-grid, .material-grid, .applications-grid, .systems-grid, .partner-grid, .range-head { grid-template-columns: 1fr; }
+    .range-feature-media { height: 300px; }
+    .applications-media .image-frame { aspect-ratio: 4 / 3; }
+    .factory-numbers { grid-template-columns: repeat(2, 1fr); }
+    .intro-body { margin-top: 8px; }
+  }
+  @media (max-width: 620px) {
+    .hero { min-height: 700px; }
+    .hero h1 { font-size: clamp(3rem, 13vw, 4.4rem); }
+    .hero-actions .btn { width: 100%; }
+    .hero-stats { gap: 16px 26px; }
+    .hero-stats strong { font-size: 20px; }
+    .hero-scroll { display: none; }
+    .range-row { grid-template-columns: 28px 1fr 20px; }
+    .range-row-media { display: none; }
+    .app-list { grid-template-columns: 1fr; }
+    .factory-numbers { grid-template-columns: repeat(2, 1fr); }
+    .machine-thumb { height: 100px; }
+    .machine-thumb img { max-height: 72px; }
+  }
+</style>

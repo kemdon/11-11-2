@@ -1,0 +1,180 @@
+---
+import '../styles.css'
+import { getTextDirection } from '../lib/i18n';
+
+export interface Props {
+	title?: string;
+	description?: string;
+	lang?: string;
+	siteName?: string;
+	defaultDescription?: string;
+	faviconHref?: string;
+	ogImage?: string;
+	noindex?: boolean;
+	alternateLocales?: Array<{ lang: string; href: string }>;
+}
+
+const { title, description, lang = 'en', siteName = '', defaultDescription = '', faviconHref = '', ogImage = '', noindex = false, alternateLocales = [] } = Astro.props;
+const metaDescription = description || defaultDescription || '';
+const documentTitle = title && siteName && title.includes(siteName) ? title : [title, siteName].filter(Boolean).join(' | ');
+const textDirection = getTextDirection(lang);
+const resolvedFaviconHref = faviconHref || '/favicon.svg';
+const brandImage = ogImage || faviconHref;
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : '';
+const absoluteBrandImage = brandImage && Astro.site ? new URL(brandImage, Astro.site).toString() : brandImage;
+const siteAnalyticsEndpoint = import.meta.env.PUBLIC_SITE_ANALYTICS_ENDPOINT;
+const enableSiteAnalytics = import.meta.env.PUBLIC_ENABLE_SITE_ANALYTICS === 'true' && Boolean(siteAnalyticsEndpoint);
+---
+
+<!DOCTYPE html>
+<html lang={lang} dir={textDirection}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={metaDescription} />
+		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href={resolvedFaviconHref} />
+		<meta name="generator" content={Astro.generator} />
+		{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+		{alternateLocales.map((alternate) => <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />)}
+		{absoluteBrandImage && <meta property="og:image" content={absoluteBrandImage} />}
+		<meta property="og:title" content={documentTitle} />
+		<meta property="og:description" content={metaDescription} />
+		<meta property="og:type" content="website" />
+		{canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+		<meta name="twitter:card" content={absoluteBrandImage ? 'summary_large_image' : 'summary'} />
+		<meta name="twitter:title" content={documentTitle} />
+		<meta name="twitter:description" content={metaDescription} />
+		{absoluteBrandImage && <meta name="twitter:image" content={absoluteBrandImage} />}
+		<meta name="theme-color" content="#14231e" />
+		<meta property="og:site_name" content={siteName} />
+		<title>{documentTitle}</title>
+		<noscript>
+			<style>
+				.fade-in-up {
+					opacity: 1 !important;
+					transform: none !important;
+				}
+			</style>
+		</noscript>
+	</head>
+	<body>
+		<slot />
+		{enableSiteAnalytics && (
+			<script is:inline define:vars={{ siteAnalyticsEndpoint }}>
+				(() => {
+					const endpoint = siteAnalyticsEndpoint;
+					const ignoredPathPrefixes = ['/api/', '/admin', '/keystatic'];
+					const path = window.location.pathname;
+
+					if (
+						ignoredPathPrefixes.some((prefix) => path === prefix || path.startsWith(prefix)) ||
+						navigator.doNotTrack === '1'
+					) {
+						return;
+					}
+
+					const makeId = () => {
+						if (window.crypto?.randomUUID) {
+							return window.crypto.randomUUID();
+						}
+						return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+					};
+
+					const getStoredId = (storage, key) => {
+						try {
+							const existing = storage.getItem(key);
+							if (existing) return existing;
+							const next = makeId();
+							storage.setItem(key, next);
+							return next;
+						} catch {
+							return makeId();
+						}
+					};
+
+					const visitorId = getStoredId(window.localStorage, 'site_analytics_visitor_id');
+					const sessionId = getStoredId(window.sessionStorage, 'site_analytics_session_id');
+
+					const sendEvent = (eventType, detail = {}) => {
+						const payload = {
+							eventType,
+							path: window.location.pathname + window.location.search,
+							referrer: document.referrer,
+							visitorId,
+							sessionId,
+							...detail,
+						};
+						const body = JSON.stringify(payload);
+
+						if (navigator.sendBeacon) {
+							const blob = new Blob([body], { type: 'application/json' });
+							if (navigator.sendBeacon(endpoint, blob)) {
+								return;
+							}
+						}
+
+						fetch(endpoint, {
+							method: 'POST',
+							headers: { 'content-type': 'application/json' },
+							body,
+							keepalive: true,
+						}).catch(() => {});
+					};
+
+					const getLabel = (element) => {
+						const explicit = element.getAttribute('data-analytics-label');
+						if (explicit) return explicit;
+						const ariaLabel = element.getAttribute('aria-label');
+						if (ariaLabel) return ariaLabel;
+						const text = element.textContent?.replace(/\s+/g, ' ').trim();
+						return text || element.getAttribute('name') || element.id || element.tagName.toLowerCase();
+					};
+
+					const getSection = (element) => {
+						const explicit = element.closest('[data-analytics-section]')?.getAttribute('data-analytics-section');
+						if (explicit) return explicit;
+						const section = element.closest('section, header, footer, nav, main, form');
+						return section?.id || section?.getAttribute('aria-label') || section?.className || '';
+					};
+
+					sendEvent('page_view');
+
+					document.addEventListener(
+						'click',
+						(event) => {
+							const target = event.target;
+							if (!(target instanceof Element)) return;
+
+							const element = target.closest('a, button, [role="button"], [data-analytics-click]');
+							if (!element) return;
+
+							const eventType = element.tagName.toLowerCase() === 'a' ? 'link_click' : 'button_click';
+							sendEvent(eventType, {
+								href: element instanceof HTMLAnchorElement ? element.href : undefined,
+								label: getLabel(element),
+								section: getSection(element),
+							});
+						},
+						{ capture: true },
+					);
+
+					document.addEventListener(
+						'submit',
+						(event) => {
+							const form = event.target;
+							if (!(form instanceof HTMLFormElement)) return;
+
+							sendEvent('form_submit', {
+								href: form.action || window.location.href,
+								label: form.getAttribute('data-analytics-label') || form.getAttribute('name') || form.id || 'form',
+								section: getSection(form),
+							});
+						},
+						{ capture: true },
+					);
+				})();
+			</script>
+		)}
+	</body>
+</html>

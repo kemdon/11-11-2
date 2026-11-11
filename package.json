@@ -1,0 +1,70 @@
+{
+  "name": "astro-corporate-frontsite-base",
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "pnpm@10.8.1",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@astrojs/markdoc": "^0.12.9",
+    "@astrojs/react": "^4.2.0",
+    "@keystatic/astro": "^5.0.6",
+    "@keystatic/core": "^0.5.50",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "astro": "^5.2.5",
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "resend": "^6.18.0",
+    "sharp": "^0.34.5",
+    "yaml": "^2.8.3",
+    "yargs-parser": "^21.1.1"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "pnpm run dev",
+    "build": "node ./scripts/run-astro-mode.mjs build",
+    "check": "astro check",
+    "preview": "pnpm exec astro preview",
+    "astro": "astro",
+    "pages:deploy": "node ./scripts/deploy.mjs",
+    "pages:domain:ensure": "node ./scripts/ensure-pages-custom-domain.mjs",
+    "cf:deploy": "node ./scripts/deploy.mjs",
+    "preview:deploy": "node ./scripts/preview-deploy.mjs",
+    "preview:delete": "node ./scripts/preview-delete.mjs",
+    "preview:router:deploy": "pnpm exec wrangler deploy --config preview-router/wrangler.toml",
+    "images:optimize": "node ./scripts/optimize-images.mjs",
+    "assets:sync": "node ./scripts/sync-assets.mjs",
+    "audit:smoke": "node ./scripts/smoke-test.mjs",
+    "audit:images": "node ./scripts/audit-image-references.mjs",
+    "audit:content-images": "node ./scripts/audit-content-images.mjs",
+    "audit:seo": "node ./scripts/audit-seo-output.mjs",
+    "audit:admin-preview": "node ./scripts/audit-keystatic-admin-preview.mjs",
+    "audit:keystatic:layout": "node ./scripts/audit-keystatic-layouts.mjs",
+    "audit:keystatic:text-scalars": "node ./scripts/audit-keystatic-text-scalars.mjs",
+    "audit:keystatic:schema": "node ./scripts/audit-keystatic-schema.mjs",
+    "audit:keystatic:image-ownership": "node ./scripts/audit-keystatic-image-ownership.mjs",
+    "i18n:audit:content": "node ./scripts/i18n/audit-translations.mjs",
+    "i18n:audit:runtime": "node ./scripts/i18n/audit-runtime-coverage.mjs",
+    "i18n:audit": "pnpm run audit:keystatic:text-scalars && pnpm run i18n:audit:content && pnpm run i18n:audit:runtime",
+    "i18n:translate:all": "node ./scripts/i18n/translate-locales.mjs --force",
+    "i18n:translate:smoke": "node ./scripts/i18n/translate-locales.mjs --locale ja --limit 1 --force",
+    "deploy": "node ./scripts/deploy.mjs",
+    "images:uploads-webp": "node ./scripts/convert-uploads-webp.mjs",
+    "audit:dist-content": "node ./scripts/audit-dist-content.mjs"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.4.0",
+    "typescript": "^5",
+    "wrangler": "^4.113.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

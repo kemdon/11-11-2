@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getLocaleConfig, getNotFoundPage, getSiteSettings } from '../lib/site-content';
+
+const { defaultLocale } = await getLocaleConfig();
+const site = await getSiteSettings(defaultLocale);
+const content = await getNotFoundPage();
+---
+
+<Layout
+  title={content.seoTitle}
+  description={site.defaultMetaDescription}
+  lang={defaultLocale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  noindex={true}
+>
+  <main class="not-found-shell">
+    <div class="not-found-card">
+      <h1 class="not-found-code">{content.code}</h1>
+      <p class="not-found-message">{content.message}</p>
+      <p class="not-found-detail">{content.detail}</p>
+      <a href={content.homeHref} class="btn btn-primary">{content.homeLabel}</a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .not-found-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .not-found-card {
+    text-align: center;
+    max-width: 480px;
+  }
+
+  .not-found-code {
+    font-size: clamp(5rem, 15vw, 8rem);
+    font-family: var(--font-serif);
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .not-found-message {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .not-found-detail {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: var(--transition-smooth);
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-3px);
+  }
+</style>

@@ -1,0 +1,133 @@
+---
+interface Props {
+  locale: string;
+  label?: string;
+  title?: string;
+  body?: string;
+  contactEmail?: string;
+  contactRedNote?: string;
+}
+
+const { locale, label, title, body, contactEmail, contactRedNote } = Astro.props;
+const hasContent = Boolean(title || body);
+
+const redNoteHref = "https://www.xiaohongshu.com/user/profile/689498d4000000002802adf9?xsec_token=YBeok0gOBGEh8stsmWMTDe3t2nrmAfW7TZF1RjZSk7SMg=&xsec_source=app_share&xhsshare=WeixinSession&appuid=689498d4000000002802adf9&apptime=1781163076&share_id=ce4897b96c5f431b82ca3f200bce40ee";
+---
+
+{hasContent && (
+  <section id="about" class="about-section section-padding">
+    <div class="container about-wrapper">
+      <div class="about-content fade-in-up">
+        {label && <span class="section-kicker">{label}</span>}
+        {title && <h2 class="section-title">{title}</h2>}
+        {body && <p class="about-body">{body}</p>}
+
+        {(contactEmail || contactRedNote) && (
+          <div class="about-contact">
+            {contactEmail && (
+              <a href={`mailto:${contactEmail}`} class="contact-card">
+                <span class="contact-label">{locale === 'en' ? 'Email' : locale === 'zh-TW' ? '郵箱' : '邮箱'}</span>
+                <span class="contact-value">{contactEmail}</span>
+              </a>
+            )}
+            {contactRedNote && (
+              <a href={redNoteHref} target="_blank" rel="noopener noreferrer" class="contact-card">
+                <span class="contact-label">{locale === 'en' ? 'RedNote' : locale === 'zh-TW' ? '小紅書' : '小红书'}</span>
+                <span class="contact-value">@{contactRedNote}</span>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .about-section {
+    background: white;
+  }
+
+  .about-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .about-content {
+    text-align: center;
+  }
+
+  .section-kicker {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    color: var(--color-text);
+    margin-bottom: 2rem;
+    letter-spacing: 0;
+  }
+
+  .about-body {
+    color: var(--color-text-muted);
+    line-height: 2;
+    margin-bottom: 3rem;
+    white-space: pre-line;
+    text-align: left;
+  }
+
+  .about-contact {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 1.25rem 2rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-smooth);
+    min-width: 240px;
+  }
+
+  a.contact-card:hover {
+    background: #dde6d8;
+    transform: translateY(-2px);
+  }
+
+  .contact-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+
+  .contact-value {
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 640px) {
+    .about-contact {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .contact-card {
+      min-width: unset;
+    }
+  }
+</style>

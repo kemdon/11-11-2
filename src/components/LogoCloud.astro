@@ -1,0 +1,117 @@
+---
+interface LogoItem {
+  name?: string;
+  image?: string;
+}
+
+interface Props {
+  label?: string;
+  title?: string;
+  logos: LogoItem[];
+}
+
+const { label, title, logos } = Astro.props;
+const visibleLogos = logos.filter((item) => item.name);
+const hasImages = visibleLogos.some((item) => item.image);
+---
+
+{visibleLogos.length > 0 && (
+  <section class="logo-cloud section-padding">
+    <div class="container">
+      <div class="logo-cloud-head fade-in-up">
+        {label && <span class="section-kicker">{label}</span>}
+        {title && <h2 class="logo-cloud-title">{title}</h2>}
+      </div>
+
+      <div class="logo-cloud-grid">
+        {visibleLogos.map((item, index) => (
+          <div class={`logo-pill fade-in-up${item.image ? ' has-image' : ''}`} style={`transition-delay: ${index * 70}ms`}>
+            {item.image ? (
+              <img src={item.image} alt={item.name || ''} class="logo-img" />
+            ) : (
+              item.name
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .logo-cloud {
+    padding-top: 0;
+  }
+
+  .logo-cloud-head {
+    display: grid;
+    gap: 1rem;
+    max-width: 48rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-kicker {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .logo-cloud-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+
+  .logo-cloud-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .logo-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 5.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--color-text);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: var(--transition-smooth);
+  }
+
+  .logo-pill:hover {
+    transform: translateY(-4px);
+    border-color: rgba(197, 160, 89, 0.45);
+    box-shadow: 0 18px 40px rgba(28, 25, 23, 0.08);
+  }
+
+  .logo-pill.has-image {
+    padding: 0.5rem 1rem;
+  }
+
+  .logo-img {
+    max-height: 2.8rem;
+    width: auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 900px) {
+    .logo-cloud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .logo-cloud-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

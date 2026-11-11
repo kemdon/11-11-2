@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string;
+  brand?: string;
+  englishName?: string;
+  oneLiner?: string;
+  keywords?: string[];
+  mainImage?: string;
+  slug: string;
+  index?: number;
+  wide?: boolean;
+}
+
+const { title, brand, englishName, oneLiner, mainImage, slug, index = 0, wide = false } = Astro.props;
+const no = String(index + 1).padStart(2, '0');
+---
+
+<a class:list={['product-card', { 'product-card--wide': wide }]} href={`/products/${slug}`}>
+  <div class="pc-media">
+    <span class="pc-no">{no}</span>
+    {mainImage
+      ? <img src={mainImage} alt={`${title} 产品实拍`} loading="eager" />
+      : <span class="pc-no-image">产品图片整理中</span>}
+  </div>
+  <div class="pc-body">
+    <span class="pc-brand">{brand || '环保纸缓冲包装'}</span>
+    <h3>{title}</h3>
+    {englishName && <span class="pc-en">{englishName}</span>}
+    {oneLiner && <p>{oneLiner}</p>}
+    <span class="pc-more">查看规格 <span aria-hidden="true">↗</span></span>
+  </div>
+</a>
+
+<style>
+  .product-card { display: flex; flex-direction: column; background: var(--paper-card); border: 1px solid rgba(20, 35, 30, 0.1); transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease); }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(20, 35, 30, 0.11); border-color: rgba(20, 35, 30, 0.22); }
+  .pc-media { position: relative; display: grid; place-items: center; height: 240px; padding: 30px; background: radial-gradient(circle at 50% 42%, #fdfaf3 0%, #eae0cd 100%); overflow: hidden; }
+  .pc-media img { max-height: 100%; width: auto; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.5s var(--ease); }
+  .product-card:hover .pc-media img { transform: scale(1.045); }
+  .pc-no { position: absolute; top: 16px; left: 18px; font-family: var(--font-display); font-size: 11px; letter-spacing: 0.14em; color: var(--clay); }
+  .pc-no-image { font-size: 12px; color: var(--muted); }
+  .pc-body { display: flex; flex-direction: column; flex: 1; padding: 26px 26px 28px; }
+  .pc-brand { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: var(--clay); }
+  .pc-body h3 { margin-top: 12px; font-size: 21px; line-height: 1.35; }
+  .pc-en { margin-top: 6px; font-family: var(--font-display); font-size: 11px; letter-spacing: 0.1em; color: var(--muted); }
+  .pc-body p { margin-top: 14px; font-size: 13px; line-height: 1.8; color: var(--muted); }
+  .pc-more { display: inline-flex; gap: 10px; margin-top: auto; padding-top: 24px; font-size: 13px; font-weight: 600; }
+  .pc-more span { color: var(--clay); transition: transform 0.3s var(--ease); }
+  .product-card:hover .pc-more span { transform: translate(3px, -3px); }
+
+  .product-card--wide { grid-column: span 2; flex-direction: row; }
+  .product-card--wide .pc-media { width: 54%; height: auto; min-height: 300px; flex-shrink: 0; }
+  .product-card--wide .pc-body { padding: 38px; }
+  .product-card--wide .pc-body h3 { font-size: 27px; }
+  .product-card--wide .pc-body p { font-size: 14px; max-width: 40ch; }
+
+  @media (max-width: 860px) {
+    .product-card--wide { grid-column: span 1; flex-direction: column; }
+    .product-card--wide .pc-media { width: 100%; min-height: 250px; height: 250px; }
+    .product-card--wide .pc-body { padding: 26px; }
+    .product-card--wide .pc-body h3 { font-size: 21px; }
+  }
+</style>

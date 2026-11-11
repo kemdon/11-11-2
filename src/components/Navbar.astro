@@ -1,0 +1,165 @@
+---
+import type { SiteSettings } from '../lib/site-content';
+
+interface Props {
+  site: SiteSettings;
+  locale: string;
+  currentPath: string;
+}
+
+const { site, currentPath } = Astro.props;
+const navItems = (site.navigation || []).filter((item) => item.label && !item.isPrimary);
+const cta = (site.navigation || []).find((item) => item.isPrimary);
+const isActive = (href?: string) => {
+  const path = href || '/';
+  return path === '/' ? currentPath === '/' : currentPath.startsWith(path);
+};
+---
+
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="笑纳包装 · 首页">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-type">
+        <strong>笑纳包装</strong>
+        <small>SHINERPACK</small>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="主导航">
+      {navItems.map((item) => (
+        <a href={item.href || '/'} class:list={['nav-link', { active: isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      {cta && <a class="header-cta" href={cta.href || '/contact'}>{cta.label}<span aria-hidden="true">↗</span></a>}
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label={site.mobileMenuLabel || '打开导航菜单'} aria-controls="mobile-menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="移动端导航">
+      {navItems.map((item, index) => (
+        <a href={item.href || '/'} class:list={[{ active: isActive(item.href) }]}>
+          <span class="mobile-index">0{index + 1}</span>{item.label}
+        </a>
+      ))}
+      {cta && <a class="mobile-cta" href={cta.href || '/contact'}>{cta.label} <span aria-hidden="true">↗</span></a>}
+    </nav>
+    <p class="mobile-contact">0769-83350356 · shiner@shinerpack.com</p>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setMenu = (open: boolean) => {
+    if (!menu || !toggle) return;
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+  };
+
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  window.addEventListener('keydown', (event) => { if (event.key === 'Escape') setMenu(false); });
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    height: var(--header-h);
+    background: rgba(20, 35, 30, 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .site-header.scrolled { background: rgba(20, 35, 30, 0.98); box-shadow: 0 10px 30px rgba(10, 20, 16, 0.18); }
+
+  .header-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+
+  .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--white); flex-shrink: 0; }
+  .brand:hover { color: var(--kraft-light); }
+  .brand-mark {
+    display: grid; place-items: center;
+    width: 34px; height: 34px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 21px; font-weight: 700; line-height: 1;
+    border-radius: 2px;
+  }
+  .brand-type { display: grid; line-height: 1.15; }
+  .brand-type strong { font-size: 17px; font-weight: 600; letter-spacing: 0.08em; }
+  .brand-type small { font-family: var(--font-display); font-size: 9px; letter-spacing: 0.24em; color: var(--kraft-light); margin-top: 3px; }
+
+  .desktop-nav { display: flex; align-items: center; gap: 38px; margin-left: auto; }
+  .nav-link { position: relative; color: rgba(255, 255, 255, 0.76); font-size: 14px; letter-spacing: 0.06em; padding: 8px 0; }
+  .nav-link::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px; background: var(--kraft-light); transition: right 0.3s var(--ease); }
+  .nav-link:hover, .nav-link.active { color: var(--white); }
+  .nav-link:hover::after, .nav-link.active::after { right: 0; }
+
+  .header-actions { display: flex; align-items: center; gap: 16px; }
+  .header-cta {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: var(--white); font-size: 13px; letter-spacing: 0.06em;
+    border-radius: 2px;
+  }
+  .header-cta:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+  .header-cta span { font-size: 15px; }
+
+  .menu-toggle {
+    display: none;
+    width: 42px; height: 42px;
+    background: transparent; border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 2px; cursor: pointer;
+    padding: 11px 9px;
+  }
+  .menu-toggle span { display: block; height: 1px; background: var(--white); margin: 5px 0; transition: transform 0.3s var(--ease), opacity 0.3s var(--ease); }
+  .menu-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .menu-toggle.open span:nth-child(2) { opacity: 0; }
+  .menu-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: absolute; top: var(--header-h); left: 0; right: 0;
+    background: var(--ink);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px 20px 30px;
+    box-shadow: 0 22px 40px rgba(10, 20, 16, 0.25);
+  }
+  .mobile-menu[hidden] { display: none; }
+  .mobile-menu nav { display: grid; }
+  .mobile-menu nav a { display: flex; align-items: baseline; gap: 16px; padding: 15px 2px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.86); font-size: 18px; }
+  .mobile-menu nav a.active { color: var(--kraft-light); }
+  .mobile-index { font-family: var(--font-display); font-size: 11px; color: var(--kraft); letter-spacing: 0.1em; }
+  .mobile-menu .mobile-cta { margin-top: 22px; display: inline-flex; justify-content: center; gap: 12px; padding: 14px 20px; background: var(--paper); color: var(--ink); font-size: 15px; border: 0; }
+  .mobile-contact { margin-top: 22px; color: rgba(255, 255, 255, 0.5); font-size: 12px; letter-spacing: 0.04em; }
+  :global(body.menu-open) { overflow: hidden; }
+
+  @media (max-width: 1020px) {
+    .desktop-nav { gap: 22px; }
+    .header-cta { padding: 9px 13px; }
+  }
+  @media (max-width: 860px) {
+    .desktop-nav, .header-cta { display: none; }
+    .menu-toggle { display: block; }
+    .header-actions { margin-left: auto; }
+  }
+</style>

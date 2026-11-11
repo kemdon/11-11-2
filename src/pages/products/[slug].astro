@@ -1,0 +1,180 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { getLocaleConfig, getProducts, getSiteSettings } from '../../lib/site-content';
+
+export async function getStaticPaths() {
+  const { defaultLocale } = await getLocaleConfig();
+  const products = await getProducts(defaultLocale, defaultLocale);
+
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { defaultLocale } = await getLocaleConfig();
+const site = await getSiteSettings(defaultLocale);
+const allProducts = await getProducts(defaultLocale, site.defaultLocale);
+const related = allProducts
+  .filter((item) => item.slug !== product.slug && item.brand === product.brand)
+  .slice(0, 3);
+
+const specs = [
+  { label: '产品类别', value: product.brand },
+  { label: '型号 / 规格', value: product.partNumber },
+  { label: '材质 / 构成', value: product.ingredients },
+  { label: '适用场景', value: product.usage },
+].filter((item) => Boolean(item.value));
+---
+
+<Layout
+  title={product.seoTitle || `${product.title} | 笑纳包装`}
+  description={product.seoDescription || product.summary || product.oneLiner}
+  lang={defaultLocale}
+  siteName={site.brandName}
+  defaultDescription={site.defaultMetaDescription}
+  faviconHref={site.logoPath}
+  ogImage={product.mainImage || site.defaultOgImage}
+>
+  <Navbar site={site} locale={defaultLocale} currentPath={`/products/${product.slug}`} />
+
+  <main>
+    <section class="detail-hero">
+      <div class="container">
+        <nav class="crumbs" aria-label="面包屑">
+          <a href="/">首页</a><span>/</span><a href="/products">产品体系</a><span>/</span><span>{product.title}</span>
+        </nav>
+        <div class="detail-hero-grid">
+          <div>
+            <span class="eyebrow">{product.brand || 'PRODUCT DETAIL'}</span>
+            <h1>{product.title}</h1>
+            {product.englishName && <p class="detail-en">{product.englishName}</p>}
+            {product.oneLiner && <p class="detail-oneliner">{product.oneLiner}</p>}
+          </div>
+          {product.keywords && product.keywords.length > 0 && (
+            <div class="detail-tags">
+              {product.keywords.map((keyword) => <span>{keyword}</span>)}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight detail-main">
+      <div class="container detail-grid">
+        <div class="detail-media">
+          {product.mainImage
+            ? <div class="detail-image"><img src={product.mainImage} alt={`${product.title} 产品实拍`} width="1000" height="800" /></div>
+            : <div class="detail-image detail-image--empty"><span>产品图片整理中</span></div>}
+          <p class="photo-caption"><span>FIG. 01</span> 产品实拍 · 规格与印刷可按需求定制</p>
+        </div>
+
+        <div class="detail-copy">
+          <span class="eyebrow">SPECIFICATIONS</span>
+          <h2>产品规格与说明</h2>
+          {product.summary && <p class="detail-summary">{product.summary}</p>}
+
+          {specs.length > 0 && (
+            <dl class="spec-list">
+              {specs.map((spec) => (
+                <div><dt>{spec.label}</dt><dd>{spec.value}</dd></div>
+              ))}
+            </dl>
+          )}
+
+          {product.description && <p class="detail-desc">{product.description}</p>}
+
+          <div class="detail-contact">
+            <p>需要样品、规格表或定制报价？</p>
+            <a class="btn btn--solid" href="mailto:shiner@shinerpack.com">邮件咨询 <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="detail-phone" href="tel:076983350356">0769-83350356</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="section related">
+        <div class="container">
+          <div class="related-head">
+            <div>
+              <span class="eyebrow">MORE PRODUCTS</span>
+              <h2 class="section-title">相关产品</h2>
+            </div>
+            <a class="text-link" href="/products">返回全部产品 <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="related-grid">
+            {related.map((item, index) => (
+              <ProductCard
+                title={item.title}
+                brand={item.brand}
+                englishName={item.englishName}
+                oneLiner={item.oneLiner}
+                mainImage={item.mainImage}
+                slug={item.slug || ''}
+                index={index}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer site={site} locale={defaultLocale} />
+</Layout>
+
+<style>
+  .detail-hero { background: var(--ink); color: var(--white); padding-top: calc(var(--header-h) + 54px); padding-bottom: 62px; }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 44px; font-size: 12px; color: rgba(255, 255, 255, 0.45); }
+  .crumbs a:hover { color: var(--white); }
+  .detail-hero .eyebrow { color: var(--kraft-light); }
+  .detail-hero-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 50px; align-items: end; }
+  .detail-hero h1 { margin-top: 20px; font-size: clamp(2.4rem, 5vw, 4.2rem); line-height: 1.14; letter-spacing: -0.04em; }
+  .detail-en { margin-top: 14px; font-family: var(--font-display); font-size: 13px; letter-spacing: 0.18em; color: var(--kraft-light); }
+  .detail-oneliner { margin-top: 24px; max-width: 48ch; font-size: 16px; line-height: 1.9; color: rgba(255, 255, 255, 0.72); }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+  .detail-tags span { padding: 8px 14px; border: 1px solid rgba(255, 255, 255, 0.22); font-size: 12px; color: rgba(255, 255, 255, 0.74); border-radius: 2px; }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(46px, 7vw, 96px); align-items: start; }
+  .detail-image { display: grid; place-items: center; min-height: 460px; padding: 48px; background: radial-gradient(circle at 50% 44%, #fdfaf3 0%, #e9dfcc 100%); border: 1px solid rgba(20, 35, 30, 0.08); }
+  .detail-image img { max-height: 400px; width: auto; object-fit: contain; mix-blend-mode: multiply; }
+  .detail-image--empty { color: var(--muted); font-size: 13px; }
+  .photo-caption { display: flex; gap: 16px; margin-top: 14px; font-size: 12px; color: var(--muted); }
+  .photo-caption span { font-family: var(--font-display); letter-spacing: 0.14em; color: var(--clay); }
+
+  .detail-copy h2 { margin-top: 20px; font-size: clamp(1.7rem, 2.6vw, 2.3rem); letter-spacing: -0.03em; }
+  .detail-summary { margin-top: 20px; font-size: 15px; line-height: 1.95; color: var(--text); }
+  .spec-list { margin-top: 30px; border-top: 1px solid var(--line); }
+  .spec-list > div { display: grid; grid-template-columns: 108px 1fr; gap: 18px; padding: 15px 0; border-bottom: 1px solid var(--line); }
+  .spec-list dt { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: var(--clay); padding-top: 3px; }
+  .spec-list dd { font-size: 14px; line-height: 1.8; color: var(--text); }
+  .detail-desc { margin-top: 26px; font-size: 14px; line-height: 2; color: var(--muted); }
+  .detail-contact { margin-top: 38px; padding: 28px; background: var(--paper-deep); border-left: 2px solid var(--kraft); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .detail-contact p { flex-basis: 100%; font-size: 14px; }
+  .detail-phone { font-family: var(--font-display); font-size: 15px; border-bottom: 1px solid var(--ink); padding-bottom: 4px; }
+  .detail-phone:hover { color: var(--clay); border-color: var(--clay); }
+
+  .related { background: var(--paper-deep); border-top: 1px solid var(--line); }
+  .related-head { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 40px; }
+  .text-link { display: inline-flex; align-items: center; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--ink); font-size: 14px; font-weight: 600; }
+  .text-link:hover { color: var(--clay); border-color: var(--clay); }
+  .related-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+
+  @media (max-width: 900px) {
+    .detail-hero-grid, .detail-grid { grid-template-columns: 1fr; gap: 32px; }
+    .detail-tags { justify-content: flex-start; }
+    .related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .detail-image { min-height: 320px; padding: 28px; }
+    .detail-image img { max-height: 260px; }
+    .spec-list > div { grid-template-columns: 1fr; gap: 4px; }
+    .related-head { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .related-grid { grid-template-columns: 1fr; }
+  }
+</style>

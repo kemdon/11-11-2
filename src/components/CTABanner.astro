@@ -1,0 +1,322 @@
+---
+import { localizeHref } from '../lib/site-content';
+
+interface TimelineItem {
+  date: string;
+  title: string;
+  description: string;
+}
+
+interface StatItem {
+  label: string;
+  value: string;
+  detail: string;
+}
+
+interface Props {
+  locale: string;
+  defaultLocale?: string;
+  label?: string;
+  title?: string;
+  body?: string;
+  timeline?: TimelineItem[];
+  stats?: StatItem[];
+  timelineTitle?: string;
+  statsLabel?: string;
+  statsTitle?: string;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+
+const {
+  locale,
+  defaultLocale,
+  label,
+  title,
+  body,
+  timeline = [],
+  stats = [],
+  timelineTitle,
+  statsLabel,
+  statsTitle,
+} = Astro.props;
+
+// Process the raw multiline body into paragraphs
+const bodyParagraphs = body ? body.split('\n').filter(p => p.trim()) : [];
+const hasContent = Boolean(label || title || bodyParagraphs.length || timeline.length || stats.length);
+const isTradChinese = locale === 'zh-TW' || locale === 'zh-HK';
+---
+
+{hasContent && <section id="brand-development" class="brand-dev-section section-padding">
+  <div class="container">
+    <div class="dev-header fade-in-up">
+      {label && <span class="section-kicker">{label}</span>}
+      {title && <h2 class="section-title">{title}</h2>}
+      {bodyParagraphs.length > 0 && (
+        <div class="section-desc-wrapper">
+          {bodyParagraphs.map((para) => (
+            <p class="section-desc">{para}</p>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <div class="dev-grid">
+      <!-- Timeline column -->
+      {timeline.length > 0 && (
+        <div class="timeline-container fade-in-up">
+          <h3 class="subsection-title">{timelineTitle}</h3>
+          <div class="timeline">
+            {timeline.map((item) => (
+              <div class="timeline-item">
+                <div class="timeline-marker">
+                  <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-content">
+                  <span class="timeline-date">{item.date}</span>
+                  <h4 class="timeline-title">{item.title}</h4>
+                  <p class="timeline-text">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Stats column -->
+      {stats.length > 0 && (
+        <div class="stats-container fade-in-up">
+          <div class="stats-header-block">
+            <span class="stats-kicker">{statsLabel}</span>
+            <h3 class="subsection-title">{statsTitle}</h3>
+          </div>
+          <div class="stats-grid">
+            {stats.map((item) => (
+              <div class="stat-card glass-card">
+                <div class="stat-accent"></div>
+                <span class="stat-label">{item.label}</span>
+                <span class="stat-value">{item.value}</span>
+                <span class="stat-detail">{item.detail}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</section>}
+
+<style>
+  .brand-dev-section {
+    background: #fbfbf9;
+    position: relative;
+    overflow: hidden;
+    padding-block: 8rem;
+    border-top: 1px solid rgba(34, 54, 48, 0.05);
+  }
+
+  .dev-header {
+    max-width: 48rem;
+    margin-bottom: 5rem;
+  }
+
+  .section-desc-wrapper {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .section-desc {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .dev-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .subsection-title {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 2.5rem;
+  }
+
+  /* Timeline Styles */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: rgba(34, 54, 48, 0.08);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+  }
+
+  .timeline-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -2rem;
+    top: 0.4rem;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .timeline-dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--color-primary-dark);
+    border: 2px solid #fbfbf9;
+    box-shadow: 0 0 0 2px rgba(34, 54, 48, 0.15);
+    transition: var(--transition-smooth);
+  }
+
+  .timeline-item:hover .timeline-dot {
+    background: var(--color-primary);
+    transform: scale(1.25);
+    box-shadow: 0 0 0 4px rgba(34, 54, 48, 0.2);
+  }
+
+  .timeline-content {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .timeline-date {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .timeline-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  /* Stats Styles */
+  .stats-header-block {
+    margin-bottom: 2.5rem;
+  }
+
+  .stats-kicker {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .glass-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    background: white;
+    border: 1px solid rgba(34, 54, 48, 0.06);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 20px rgba(34, 54, 48, 0.02);
+    overflow: hidden;
+    transition: var(--transition-smooth);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(34, 54, 48, 0.06);
+    border-color: rgba(34, 54, 48, 0.15);
+  }
+
+  .stat-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+    opacity: 0.15;
+    transition: var(--transition-smooth);
+  }
+
+  .glass-card:hover .stat-accent {
+    opacity: 1;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .stat-value {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-primary-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-detail {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    opacity: 0.85;
+  }
+
+  @media (max-width: 1024px) {
+    .dev-grid {
+      grid-template-columns: 1fr;
+      gap: 5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .brand-dev-section {
+      padding-block: 5rem;
+    }
+    
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
